@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  marker_id: 1
+  title: MyString
+  description: MyString
+  tweets: MyString
+  videos: MyString
+  photos: MyString
+  blogs: MyString
+
+two:
+  marker_id: 1
+  title: MyString
+  description: MyString
+  tweets: MyString
+  videos: MyString
+  photos: MyString
+  blogs: MyString

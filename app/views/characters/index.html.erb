@@ -1,0 +1,56 @@
+
+<%- model_class = Character.new.class -%>
+<!--<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>!-->
+    <%= gmaps(
+            "map_options" => {"container_id" => "connections_map_container", "auto_adjust" => "true", "bounds" => '[{"lat": 0, "lng": 0 }, {"lat": 80 , "lng": 100 }]'},
+            "markers" => {"data" => @json,
+                          "options" => {"do_clustering" => true}},
+            "polylines" => {"data" => @p}
+    ) %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+    <!--  <th><%= model_class.human_attribute_name(:id) %></th>!-->
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th><%= model_class.human_attribute_name(:address) %></th>
+      <th><%= model_class.human_attribute_name(:longitude) %></th>
+      <th><%= model_class.human_attribute_name(:latitude) %></th>
+      <th><%= model_class.human_attribute_name(:gmaps) %></th>
+      <th><%= model_class.human_attribute_name(:user_id) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @characters.each do |character| %>
+      <tr>
+        <!--<td><%= link_to character.id, character_path(character) %></td>!-->
+        <td><%= character.name %></td>
+        <td><%= character.address %></td>
+        <td><%= character.longitude %></td>
+        <td><%= character.latitude %></td>
+        <td><%= character.gmaps %></td>
+        <td><%= character.user_id %></td>
+        <td><%=l character.created_at %></td>
+        <td>
+          <%= link_to t('.show', :default => t("helpers.links.show")),
+          character_path(character), :class => 'btn btn-mini btn-info'
+          %>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_character_path(character), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      character_path(character),
+                      :method => :delete,
+                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_character_path,
+            :class => 'btn btn-primary' %>

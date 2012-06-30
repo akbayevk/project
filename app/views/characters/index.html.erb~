@@ -1,0 +1,128 @@
+<% content_for :scripts do %>
+    <script type="text/javascript" charset="utf-8">
+      $(function(){
+          $("#replace_markers").click(function(){
+              $.getJSON("/characters.json" , function(data){
+                 Gmaps.map.replaceMarkers(data);
+              });
+
+          });
+      });
+
+    </script>
+<% end %>
+<h1>Listing destinations</h1>
+
+<%= link_to 'New Character', new_character_path %>
+<br />
+
+<% @polylines_json = '[
+[
+
+ {"lng": -80.190262, "lat": 25.774252, "strokeColor": "#000"},
+
+ {"lng": -66.118292, "lat": 18.466465},
+ {"lng": -64.75737, "lat": 32.321384}
+ ],
+
+ [
+
+ {"lng":   0, "lat":   0},
+ {"lng":  10, "lat":  10},
+ {"lng": -10, "lat": -10}
+ ]
+]'  %>
+<%= gmaps(
+         "map_options" => {"container_id" => "connections_map_container", "auto_adjust" => "true", "bounds" => '[{"lat": 0, "lng": 0 }, {"lat": 80 , "lng": 100 }]'},
+          "markers" => {"data" => @json,
+                        "options" => {#"list_container" => "markers_list",
+                                      #"randomize" => true ,
+                                      #"max_random_distance" => 10000,
+                                      "do_clustering" => true } },
+			"polylines"    => { "data" => @polylines_json }
+#    "direction"   => { "data" => { "from" => "manchester, UK", "to" => "Berlin, Germany" } }
+) %>
+
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Address</th>
+    <!--<th>Longitude</th>
+    <th>Latitude</th>
+    <th>Gmaps</th>!-->
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @characters.each do |character| %>
+  <tr>
+    <td><%= character.name %></td>
+    <td><%= character.address %></td>
+
+    <!--<td><%= character.longitude %></td>
+    <td><%= character.latitude %></td>
+    <td><%= character.gmaps %></td> !-->
+    <td><%= link_to 'Show', character %></td>
+<% if User.find_by_id(session[:user_id]) %>
+    <td><%= link_to 'Edit', edit_character_path(character) %></td>
+    <td><%= link_to 'Destroy', character, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+      <% end %>
+</table>
+
+
+<%= will_paginate %>
+<!--<ul id="markers_list">  </ul>
+<button id = "replace_markers">refresh markers</button>
+     !-->
+
+<% content_for :scripts do %>
+    <script type="text/javascript" charset="utf-8">
+    /*    var markersArray = [];
+        // On click, clear markers, place a new one, update coordinates in the form
+        Gmaps.map.callback = function() {
+            google.maps.event.addListener(Gmaps.map.map, 'click', function(event) {
+              clearOverlays();
+              placeMarker(event.latLng);
+              updateFormLocation(event.latLng);
+            });
+        };
+        // Update form attributes with given coordinates
+        function updateFormLocation(latLng) {
+            $('#location_attributes_latitude').val(latLng.lat());
+            $('#location_attributes_longitude').val(latLng.lng());
+            $('#location_attributes_gmaps_zoom').val(Gmaps.map.map.getZoom());
+        }
+        // Add a marker with an open infowindow
+        function placeMarker(latLng) {
+            var marker = new google.maps.Marker({
+                position: latLng,
+                map: Gmaps.map.map,
+                draggable: true
+            });
+            markersArray.push(marker);
+            // Set and open infowindow
+            var infowindow = new google.maps.InfoWindow({
+                content: '<div class="popup"><h2>Awesome!</h2><p>Drag me and adjust the zoom level.</p>'
+            });
+            infowindow.open(Gmaps.map.map,marker);
+            // Listen to drag & drop
+            google.maps.event.addListener(marker, 'dragend', function() {
+                updateFormLocation(this.getPosition());
+            });
+        }
+        // Removes the overlays from the map
+        function clearOverlays() {
+          if (markersArray) {
+            for (var i = 0; i < markersArray.length; i++ ) {
+              markersArray[i].setMap(null);
+            }
+          }
+          markersArray.length = 0;
+        }      */
+    </script>
+
+<% end %>

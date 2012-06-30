@@ -1,0 +1,14 @@
+<% if notice %>
+<%= notice %>
+
+<% end %>
+<% @users.each do |user| %>
+Name			
+<%= user.name %>
+<%= link_to 'Show', user %>
+<%= link_to 'Edit', edit_user_path(user) %>
+<%= link_to 'Destroy', user, :confirm => 'Are you sure?', :method => :delete %>
+    <br/>
+<% end %>
+
+<%= link_to 'New User', new_user_path %>
