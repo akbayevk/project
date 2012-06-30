@@ -12,7 +12,7 @@
 <table class="table table-striped">
   <thead>
     <tr>
-    <!--  <th><%= model_class.human_attribute_name(:id) %></th>!-->
+    
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:address) %></th>
       <th><%= model_class.human_attribute_name(:longitude) %></th>
@@ -26,7 +26,7 @@
   <tbody>
     <% @characters.each do |character| %>
       <tr>
-        <!--<td><%= link_to character.id, character_path(character) %></td>!-->
+   
         <td><%= character.name %></td>
         <td><%= character.address %></td>
         <td><%= character.longitude %></td>
