@@ -15,12 +15,9 @@
     
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:address) %></th>
-      <th><%= model_class.human_attribute_name(:longitude) %></th>
-      <th><%= model_class.human_attribute_name(:latitude) %></th>
-      <th><%= model_class.human_attribute_name(:gmaps) %></th>
-      <th><%= model_class.human_attribute_name(:user_id) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+      <th>Author</th>
+      
+      
     </tr>
   </thead>
   <tbody>
@@ -29,11 +26,9 @@
    
         <td><%= character.name %></td>
         <td><%= character.address %></td>
-        <td><%= character.longitude %></td>
-        <td><%= character.latitude %></td>
-        <td><%= character.gmaps %></td>
-        <td><%= character.user_id %></td>
-        <td><%=l character.created_at %></td>
+       
+        <td><%= User.find(character.user_id).name %></td>
+       
         <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),
           character_path(character), :class => 'btn btn-mini btn-info'
@@ -51,6 +46,6 @@
   </tbody>
 </table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
+<%= link_to t('.new', :default => t("helpers.links.create_new")),
             new_character_path,
-            :class => 'btn btn-primary' %>
+            :class => 'btn btn-large btn-success'  %>
