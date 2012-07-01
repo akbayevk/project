@@ -19,15 +19,15 @@ class EventDetailsController < ApplicationController
     @marker_id = params[:id]
     
     @event_detail = EventDetail.find_by_marker_id(params[:id])
-    user_id = Character.find(params[:id])
+    user_id = Character.find(params[:id]).user_id
     
     
     if @event_detail == nil
       
-      if(session[:user_id] == user_id and user_id != nil)
+      if(session[:user_id] == user_id && user_id != nil)
         redirect_to :action => "new",  :id => params[:id] 
       else
-        flash[:notice] = 'No info is available!'
+        flash[:notice] =  "No info is available!"
         
         redirect_to character_path(params[:id])
       end
@@ -37,6 +37,13 @@ class EventDetailsController < ApplicationController
     
   else 
     @user_tweets = Twitter.user_timeline(User.find(user_id).twitter)
+   #@j = JSON(@user_tweets)
+    #@j.each do |tweet|
+     # if tweet['created_at'] >= @event_detail.from && tweet["created_at"] <= @event_detail.to
+      #  @tweets += tweet["text"]
+       # @tweets += "||||"
+      #end  
+   # end
     @event_detail.tweets = @user_tweets
 
     respond_to do |format|

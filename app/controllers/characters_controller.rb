@@ -41,7 +41,10 @@ class CharactersController < ApplicationController
   end
   
   def user_markers
-    @characters = Character.find_all_by_user_id(session[:user_id]) 
+    
+    @characters = Character.search(params[:search], params[:page])
+    @characters = @characters.find_all_by_user_id(session[:user_id]) 
+    
   end
 
   # GET /characters/new
