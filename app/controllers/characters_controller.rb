@@ -7,6 +7,7 @@ class CharactersController < ApplicationController
   respond_to :json, :html
   def index
     @characters = Character.search(params[:search], params[:page])
+    
     @json = Character.all.to_gmaps4rails
     @lines = Character.all
     @p = '['
@@ -68,7 +69,7 @@ class CharactersController < ApplicationController
 
     respond_to do |format|
       if @character.save
-        format.html { redirect_to @character, notice: 'Character was successfully created.' }
+        format.html { redirect_to @character, notice: 'Marker was successfully created.' }
         format.json { render json: @character, status: :created, location: @character }
       else
         format.html { render action: "new" }
@@ -85,14 +86,14 @@ class CharactersController < ApplicationController
     respond_to do |format|
       if @character.user_id == session[:user_id]
       if @character.update_attributes(params[:character])  
-        format.html { redirect_to @character, notice: 'Character was successfully updated.' }
+        format.html { redirect_to @character, notice: 'Marker was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
         format.json { render json: @character.errors, status: :unprocessable_entity }
       end
       else 
-        format.html { redirect_to @character, notice: 'Permission denied!' }
+        format.html { redirect_to @character, error: 'Permission denied!' }
         format.json { render json: @character.errors, status: :unprocessable_entity }
         
     end

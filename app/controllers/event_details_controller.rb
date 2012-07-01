@@ -19,7 +19,7 @@ class EventDetailsController < ApplicationController
     @marker_id = params[:id]
     
     @event_detail = EventDetail.find_by_marker_id(params[:id])
-    user_id = Character.find(params[:id]).user_id
+    user_id = Character.find(params[:id])
     
     
     if @event_detail == nil
@@ -28,7 +28,8 @@ class EventDetailsController < ApplicationController
         redirect_to :action => "new",  :id => params[:id] 
       else
         flash[:notice] = 'No info is available!'
-        redirect_to request.referer
+        
+        redirect_to character_path(params[:id])
       end
       
       

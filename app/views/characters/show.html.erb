@@ -2,7 +2,12 @@
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human %></h1>
 </div>
-
+  <% flash.each do |name, msg| %>
+  <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
+    <a class="close" data-dismiss="alert">&#215;</a>
+    <%= content_tag :div, msg, :id => "flash_#{name}" if msg.is_a?(String) %>
+  </div>
+<% end %>
 <dl class="dl-horizontal">
   <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
   <dd><%= @character.name %></dd>
@@ -15,19 +20,25 @@
   <dt><strong><%= model_class.human_attribute_name(:gmaps) %>:</strong></dt>
   <dd><%= @character.gmaps %></dd>
   <dt><strong><%= model_class.human_attribute_name(:user_id) %>:</strong></dt>
-  <dd><%= @character.user_id %></dd>
+  <dd><%= User.find(@character.user_id).name %></dd>
 </dl>
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               characters_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_character_path(@character), :class => 'btn' %>
   <%= link_to t('event_detail.show', :default => t("helpers.links.more_details")),
             event_detail_path(@character), :class => 'btn' %>
+  <% if (session[:user_id] != nil && @character.user_id == session[:user_id]) %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_character_path(@character), :class => 'btn' %>
+  
   <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
               character_path(@character),
               :method => 'delete',
               :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
               :class => 'btn btn-danger' %>
+ <% end%>
+  
 </div>
+
+  
