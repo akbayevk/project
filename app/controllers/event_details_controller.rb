@@ -36,7 +36,9 @@ class EventDetailsController < ApplicationController
       
     
   else 
-    @user_tweets = Twitter.user_timeline(User.find(user_id).twitter)
+    @user_tweets = Twitter.user_timeline(User.find(user_id).twitter, count: 200)
+    
+    #@user_tweets = EventDetail.fetch_all_tweets(User.find(user_id).twitter)
    #@j = JSON(@user_tweets)
     #@j.each do |tweet|
      # if tweet['created_at'] >= @event_detail.from && tweet["created_at"] <= @event_detail.to
@@ -44,7 +46,10 @@ class EventDetailsController < ApplicationController
        # @tweets += "||||"
       #end  
    # end
-    @event_detail.tweets = @user_tweets
+   @event_detail.tweets = @user_tweets
+    
+      
+      
 
     respond_to do |format|
       format.html # show.html.erb
