@@ -35,8 +35,13 @@ class EventDetailsController < ApplicationController
       
       
     
-  else 
-    @user_tweets = Twitter.user_timeline(User.find(user_id).twitter, count: 200)
+  else
+    
+      
+    
+     # @tweets = Tweet.get_tweets(user_tweet, @event_detail.from, @event_detail.to)
+     # @vent_detail.tweet_content = @tweets
+   # @user_tweets = Twitter.user_timeline(User.find(user_id).twitter, count: 200)
     
     #@user_tweets = EventDetail.fetch_all_tweets(User.find(user_id).twitter)
    #@j = JSON(@user_tweets)
@@ -46,9 +51,13 @@ class EventDetailsController < ApplicationController
        # @tweets += "||||"
       #end  
    # end
-   @event_detail.tweets = @user_tweets
+   #@event_detail.tweets = @user_tweets
+  
+    t_account = User.find(Character.find(@event_detail.marker_id).user_id).twitter
     
-      
+      Tweet.update_tweets(@event_detail.marker_id, t_account, @event_detail.from, @event_detail.to)
+    
+    
       
 
     respond_to do |format|
@@ -79,9 +88,12 @@ class EventDetailsController < ApplicationController
   # POST /event_details
   # POST /event_details.json
   def create
+    
     @event_detail = EventDetail.new(params[:event_detail])
-
-
+    t_account = User.find(Character.find(@event_detail.marker_id).user_id).twitter
+    Tweet.set_tweets(t_account)     
+    
+    
     respond_to do |format|
       if @event_detail.save
         format.html { redirect_to :controller => "characters", :action => "show", :id => @event_detail.marker_id, notice: 'Event detail was successfully created.' }

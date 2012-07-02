@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120626134734) do
+ActiveRecord::Schema.define(:version => 20120702205152) do
 
   create_table "characters", :force => true do |t|
     t.string   "name"
@@ -28,14 +28,13 @@ ActiveRecord::Schema.define(:version => 20120626134734) do
     t.integer  "marker_id"
     t.string   "title"
     t.string   "description"
-    t.string   "tweets"
-    t.string   "videos"
-    t.string   "photos"
-    t.string   "blogs"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
     t.date     "from"
     t.date     "to"
+    t.string   "tweet_name"
+    t.string   "tweet_id"
+    t.text     "tweet_content"
   end
 
   create_table "events", :force => true do |t|
@@ -55,6 +54,18 @@ ActiveRecord::Schema.define(:version => 20120626134734) do
     t.string   "role"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "tweets", :force => true do |t|
+    t.string   "tweet_id"
+    t.string   "screen_name"
+    t.text     "content"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.string   "event_id"
+    t.date     "from"
+    t.date     "to"
+    t.date     "tweet_created_date"
   end
 
   create_table "users", :force => true do |t|

@@ -10,21 +10,24 @@
   <dd><%= @event_detail.title %></dd>
   <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
   <dd><%= @event_detail.description %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:tweets) %>:</strong></dt>
+  <dt><strong>tweets</strong></dt>
   
   
   <dd>
-<%= @event_detail.tweets %></dd>
+    <%# @tweets = Tweet.get_tweets(User.find(Character.find(@event_detail.marker_id).user_id).twitter, @event_detail.from, @event_detail.to)%>
+    <% tweets =  Tweet.find_all_by_screen_name(User.find(Character.find(@event_detail.marker_id).user_id).twitter, :conditions =>["date(created_at) BETWEEN ? AND ? ", @event_detail.from ,@event_detail.to]) %>
+ <% tweets.each do |t| %>
+    <blockquote>
+      <%= t.content %>
+      <div class="from">&mdash; @<%= t.screen_name %></div>
+    </blockquote>
+    <% end %>
+  </dd>
   
    
   
   
-  <dt><strong><%= model_class.human_attribute_name(:videos) %>:</strong></dt>
-  <dd><%= @event_detail.videos %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:photos) %>:</strong></dt>
-  <dd><%= @event_detail.photos %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:blogs) %>:</strong></dt>
-  <dd><%= @event_detail.blogs %></dd>
+  
   <dt><strong><%= model_class.human_attribute_name(:from) %>:</strong></dt>
   <dd><%= @event_detail.from %></dd>
   <dt><strong><%= model_class.human_attribute_name(:to) %>:</strong></dt>
