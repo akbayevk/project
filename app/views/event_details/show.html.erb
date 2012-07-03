@@ -4,8 +4,7 @@
 </div>
 
 <dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:marker_id) %>:</strong></dt>
-  <dd><%= @event_detail.marker_id %></dd>
+  
   <dt><strong><%= model_class.human_attribute_name(:title) %>:</strong></dt>
   <dd><%= @event_detail.title %></dd>
   <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
@@ -14,14 +13,18 @@
   
   
   <dd>
-    <%# @tweets = Tweet.get_tweets(User.find(Character.find(@event_detail.marker_id).user_id).twitter, @event_detail.from, @event_detail.to)%>
-    <% tweets =  Tweet.find_all_by_screen_name(User.find(Character.find(@event_detail.marker_id).user_id).twitter, :conditions =>["date(created_at) BETWEEN ? AND ? ", @event_detail.from ,@event_detail.to]) %>
+    <table>
+    
+    <% tweets =  Tweet.find_all_by_screen_name(User.find(Character.find(@event_detail.character_id).user_id).twitter, :conditions =>["date(created_at) BETWEEN ? AND ? ", @event_detail.from ,@event_detail.to]) %>
  <% tweets.each do |t| %>
+      <tr><td>
     <blockquote>
       <%= t.content %>
       <div class="from">&mdash; @<%= t.screen_name %></div>
     </blockquote>
+          </td></tr>
     <% end %>
+      </table>
   </dd>
   
    
@@ -44,6 +47,5 @@
               :method => 'delete',
               :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
               :class => 'btn btn-danger' %>
-  <%= link_to t('.more_details', :default => t("helpers.link.more_details")), 
-    event_detail_path(@character), :class => 'btn'  %>
+ 
 </div>

@@ -6,13 +6,10 @@
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:id) %></th>
-      <th><%= model_class.human_attribute_name(:marker_id) %></th>
+      <th><%= model_class.human_attribute_name(:character_id) %></th>
       <th><%= model_class.human_attribute_name(:title) %></th>
       <th><%= model_class.human_attribute_name(:description) %></th>
-      <th><%= model_class.human_attribute_name(:tweets) %></th>
-      <th><%= model_class.human_attribute_name(:videos) %></th>
-      <th><%= model_class.human_attribute_name(:photos) %></th>
-      <th><%= model_class.human_attribute_name(:blogs) %></th>
+      
       <th><%= model_class.human_attribute_name(:from) %></th>
       <th><%= model_class.human_attribute_name(:to) %></th>
       <th><%= model_class.human_attribute_name(:created_at) %></th>
@@ -26,10 +23,7 @@
         <td><%= event_detail.marker_id %></td>
         <td><%= event_detail.title %></td>
         <td><%= event_detail.description %></td>
-        <td><%= event_detail.tweets %></td>
-        <td><%= event_detail.videos %></td>
-        <td><%= event_detail.photos %></td>
-        <td><%= event_detail.blogs %></td>
+     
         <td><%= event_detail.from %></td>
         <td><%= event_detail.to %></td>
         <td><%=l event_detail.created_at %></td>

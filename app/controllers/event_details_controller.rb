@@ -16,46 +16,32 @@ class EventDetailsController < ApplicationController
   # GET /event_details/1
   # GET /event_details/1.json
   def show
-    @marker_id = params[:id]
+   
     
-    @event_detail = EventDetail.find_by_marker_id(params[:id])
+    @event_detail = EventDetail.find_by_character_id (params[:id])
+    @character_id = params[:id]
     user_id = Character.find(params[:id]).user_id
     
     
     if @event_detail == nil
       
       if(session[:user_id] == user_id && user_id != nil)
-        redirect_to :action => "new",  :id => params[:id] 
+        redirect_to :action => "new", :id => params[:id] 
       else
         flash[:notice] =  "No info is available!"
         
         redirect_to character_path(params[:id])
       end
-      
-      
-      
     
   else
     
       
     
-     # @tweets = Tweet.get_tweets(user_tweet, @event_detail.from, @event_detail.to)
-     # @vent_detail.tweet_content = @tweets
-   # @user_tweets = Twitter.user_timeline(User.find(user_id).twitter, count: 200)
     
-    #@user_tweets = EventDetail.fetch_all_tweets(User.find(user_id).twitter)
-   #@j = JSON(@user_tweets)
-    #@j.each do |tweet|
-     # if tweet['created_at'] >= @event_detail.from && tweet["created_at"] <= @event_detail.to
-      #  @tweets += tweet["text"]
-       # @tweets += "||||"
-      #end  
-   # end
-   #@event_detail.tweets = @user_tweets
   
-    t_account = User.find(Character.find(@event_detail.marker_id).user_id).twitter
+    t_account = User.find(Character.find(@event_detail.character_id).user_id).twitter
     
-      Tweet.update_tweets(@event_detail.marker_id, t_account, @event_detail.from, @event_detail.to)
+      Tweet.update_tweets(@event_detail.character_id, t_account, @event_detail.from, @event_detail.to)
     
     
       
@@ -71,8 +57,11 @@ class EventDetailsController < ApplicationController
   # GET /event_details/new
   # GET /event_details/new.json
   def new
+    c_id = params[:id]
+    
     @event_detail = EventDetail.new
-    @event_detail.marker_id = params[:id]
+    @event_detail.character_id = c_id
+   
 
     respond_to do |format|
       format.html # new.html.erb
@@ -90,13 +79,13 @@ class EventDetailsController < ApplicationController
   def create
     
     @event_detail = EventDetail.new(params[:event_detail])
-    t_account = User.find(Character.find(@event_detail.marker_id).user_id).twitter
+    t_account = User.find(Character.find(@event_detail.character_id).user_id).twitter
     Tweet.set_tweets(t_account)     
     
     
     respond_to do |format|
       if @event_detail.save
-        format.html { redirect_to :controller => "characters", :action => "show", :id => @event_detail.marker_id, notice: 'Event detail was successfully created.' }
+        format.html { redirect_to event_detail_path(@event_detail.character_id), notice: 'Event detail was successfully created.' }
         format.json { render json: @event_detail, status: :created, location: @event_detail }
       else
         format.html { render action: "new" }

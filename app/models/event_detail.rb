@@ -1,6 +1,6 @@
 class EventDetail < ActiveRecord::Base
-  attr_accessible :blogs, :description, :marker_id, :photos, :title, 
-    :tweets, :videos, :from, :to, :tweet_id, :tweet_name, :tweet_content
+  attr_accessible :blogs, :description, :character_id,  :title, 
+     :from, :to
   belongs_to :character
  
   

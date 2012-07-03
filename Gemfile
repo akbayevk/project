@@ -11,6 +11,7 @@ gem 'will_paginate'
 gem 'mysql2'
 gem 'oauth'
 gem 'twitter'
+gem 'activeadmin'
 
 
 
