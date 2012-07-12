@@ -1,8 +1,9 @@
-class EventDetailsController < ApplicationController
+class EventDetailsController < ApplicationController 
   # GET /event_details
   # GET /event_details.json
   
   skip_before_filter :authorize, :only => [:index, :show]
+  
   
   def index
     @event_details = EventDetail.all
@@ -16,36 +17,25 @@ class EventDetailsController < ApplicationController
   # GET /event_details/1
   # GET /event_details/1.json
   def show
-   
     
     @event_detail = EventDetail.find_by_character_id (params[:id])
     @character_id = params[:id]
+    
     user_id = Character.find(params[:id]).user_id
     
-    
     if @event_detail == nil
-      
       if(session[:user_id] == user_id && user_id != nil)
         redirect_to :action => "new", :id => params[:id] 
       else
         flash[:notice] =  "No info is available!"
-        
         redirect_to character_path(params[:id])
       end
     
   else
-    
-      
-    
-    
-  
-    t_account = User.find(Character.find(@event_detail.character_id).user_id).twitter
+      t_account = User.find(Character.find(@event_detail.character_id).user_id).twitter
     
       Tweet.update_tweets(@event_detail.character_id, t_account, @event_detail.from, @event_detail.to)
     
-    
-      
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @event_detail }
@@ -80,6 +70,15 @@ class EventDetailsController < ApplicationController
     
     @event_detail = EventDetail.new(params[:event_detail])
     t_account = User.find(Character.find(@event_detail.character_id).user_id).twitter
+    
+    calendar = Event.new
+    calendar.id = @event_detail.character_id
+    calendar.start_at = DateTime.parse(@event_detail.from.to_s)
+    calendar.end_at = DateTime.parse(@event_detail.to.to_s)
+    calendar.name = @event_detail.title
+    calendar.character_id = @event_detail.character_id
+    calendar.save
+    
     Tweet.set_tweets(t_account)     
     
     
@@ -101,7 +100,10 @@ class EventDetailsController < ApplicationController
 
     respond_to do |format|
       if @event_detail.update_attributes(params[:event_detail])
-        format.html { redirect_to @event_detail, notice: 'Event detail was successfully updated.' }
+        #updating all relevant dates and tables
+        
+        
+        format.html { redirect_to event_detail_path(@event_detail.character_id), notice: 'Event detail was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

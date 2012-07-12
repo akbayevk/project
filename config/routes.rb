@@ -1,37 +1,14 @@
 Gmaps::Application.routes.draw do
 
+  match '/calendar(/:year(/:month))' => 'calendar#index', :as => :calendar, :constraints => {:year => /\d{4}/, :month => /\d{1,2}/}
+
+  match "/events/:id" => "event_details#show"
+
   ActiveAdmin.routes(self)
 
   devise_for :admin_users, ActiveAdmin::Devise.config
 
   resources :event_details
-
- # get "events/new"
-
-  #get "events/create"
-
-  #get "events/destroy"
-
- # get "events/edit"
-
- # get "events/update"
-
-  #get "events/show"
-
- # get "events/index"
-
-  get "roles/new"
-
-  get "roles/create"
-
-  get "roles/destroy"
-
-  get "roles/edit"
-
-  get "roles/update" 
-  
-  resources :events
-
   
 
   controller :sessions do

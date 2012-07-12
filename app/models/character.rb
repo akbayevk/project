@@ -1,9 +1,16 @@
 class Character < ActiveRecord::Base
   
+  attr_accessible :address, :gmaps, :latitude, :longitude, :name, :user_id, :event_detail_attributes
   belongs_to :user, :inverse_of => :characters
+  has_one :event_detail
+  
+  accepts_nested_attributes_for :event_detail
+  
 
-  attr_accessible :address, :gmaps, :latitude, :longitude, :name, :user_id
+  
   acts_as_gmappable
+  
+  validates_presence_of :name, :address
   
 
   def self.search(search, page)
@@ -16,7 +23,7 @@ class Character < ActiveRecord::Base
     address
   end
   def gmaps4rails_infowindow
-      "<h2>#{name}</h2>"# add here whatever html content you desire, it will be displayed when users clicks on the marker
+      "#{name}"# add here whatever html content you desire, it will be displayed when users clicks on the marker
   end
   def gmaps4rails_marker_picture
  {

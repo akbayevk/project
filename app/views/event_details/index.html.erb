@@ -20,7 +20,7 @@
     <% @event_details.each do |event_detail| %>
       <tr>
         <td><%= link_to event_detail.id, event_detail_path(event_detail) %></td>
-        <td><%= event_detail.marker_id %></td>
+        <td><%= event_detail.character_id %></td>
         <td><%= event_detail.title %></td>
         <td><%= event_detail.description %></td>
      

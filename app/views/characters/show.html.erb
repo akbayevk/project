@@ -2,12 +2,7 @@
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human %></h1>
 </div>
-  <% flash.each do |name, msg| %>
-  <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
-    <a class="close" data-dismiss="alert">&#215;</a>
-    <%= content_tag :div, msg, :id => "flash_#{name}" if msg.is_a?(String) %>
-  </div>
-<% end %>
+ 
 <dl class="dl-horizontal">
   <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
   <dd><%= @character.name %></dd>
@@ -25,7 +20,7 @@
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
-              characters_path, :class => 'btn'  %>
+              request.referer, :class => 'btn'  %>
   <%= link_to t('event_detail.show', :default => t("helpers.links.more_details")),
             event_detail_path(@character), :class => 'btn' %>
   <% if (session[:user_id] != nil && @character.user_id == session[:user_id]) %>

@@ -25,10 +25,7 @@ class CharactersController < ApplicationController
      respond_with @json
     
   end
-
-
-
-
+  
   # GET /characters/1
   # GET /characters/1.json
   def show
