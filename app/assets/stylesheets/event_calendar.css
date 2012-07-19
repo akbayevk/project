@@ -25,6 +25,7 @@
 
 /* Month name header & links */
 .ec-calendar-header {
+    margin: 5px;    
   padding: 5px 0;
   width: 100%;
   table-layout: fixed;

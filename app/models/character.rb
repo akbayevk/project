@@ -1,13 +1,10 @@
 class Character < ActiveRecord::Base
   
-  attr_accessible :address, :gmaps, :latitude, :longitude, :name, :user_id, :event_detail_attributes
+  attr_accessible :address, :gmaps, :latitude, :longitude, :name, :id, :user_id, :event_details_attributes
   belongs_to :user, :inverse_of => :characters
-  has_one :event_detail
+  has_many :event_details
   
-  accepts_nested_attributes_for :event_detail
-  
-
-  
+  accepts_nested_attributes_for :event_details
   acts_as_gmappable
   
   validates_presence_of :name, :address
@@ -23,7 +20,8 @@ class Character < ActiveRecord::Base
     address
   end
   def gmaps4rails_infowindow
-      "#{name}"# add here whatever html content you desire, it will be displayed when users clicks on the marker
+      "#{name}<br/><a class='label label-info' data-toggle='modal' href='#myModal' >more details</a>"# add here whatever html content you desire, it will be displayed when users clicks on the marker
+       
   end
   def gmaps4rails_marker_picture
  {
@@ -37,4 +35,6 @@ class Character < ActiveRecord::Base
       name
 
 end
+
+  
 end

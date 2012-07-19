@@ -34,7 +34,7 @@ class EventDetailsController < ApplicationController
   else
       t_account = User.find(Character.find(@event_detail.character_id).user_id).twitter
     
-      Tweet.update_tweets(@event_detail.character_id, t_account, @event_detail.from, @event_detail.to)
+    #  Tweet.update_tweets(@event_detail.character_id, t_account, @event_detail.from, @event_detail.to)
     
     respond_to do |format|
       format.html # show.html.erb
@@ -79,7 +79,7 @@ class EventDetailsController < ApplicationController
     calendar.character_id = @event_detail.character_id
     calendar.save
     
-    Tweet.set_tweets(t_account)     
+    Tweet.set_tweets(t_account, @event_detail.id)     
     
     
     respond_to do |format|
@@ -101,7 +101,8 @@ class EventDetailsController < ApplicationController
     respond_to do |format|
       if @event_detail.update_attributes(params[:event_detail])
         #updating all relevant dates and tables
-        
+      #  Tweet.update_tweets(id, name, from, to)
+      Event.update_dates(@event_detail.character_id, @event_detail.from, @event_detail.to)
         
         format.html { redirect_to event_detail_path(@event_detail.character_id), notice: 'Event detail was successfully updated.' }
         format.json { head :no_content }
