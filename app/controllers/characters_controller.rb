@@ -104,6 +104,7 @@ class CharactersController < ApplicationController
   # DELETE /characters/1.json
   def destroy
     @character = Character.find(params[:id])
+    @character.event_details.delete
     @character.destroy
 
     respond_to do |format|

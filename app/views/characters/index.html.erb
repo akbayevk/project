@@ -5,12 +5,15 @@
 <%= gmaps(
   "map_options" => {"auto_adjust" => "true", "bounds" => '[{"lat": 0, "lng": 0 }, {"lat": 80 , "lng": 100 }]'},
   "markers" => {"data" => @json,
-    "options" => {"do_clustering" => true}},
+  "options" => {"do_clustering" => true}},
   "polylines" => {"data" => @p}
 ) %>  
 
+<br/>
+
+<br/>
 <script type="text/javascript">
-  $('#myModal').modal({
+  $().modal({
     keyboard: false
   })
  
@@ -21,18 +24,61 @@
     $("[rel=popover]").popover();
   })();
 </script>
-<ul class="thumbnails" >
-  <li class="span4">
-    <a href='/calendar' class="thumbnail" rel="popover"  data-content="It's so simple to create a tooltop for my website!<b>asdf</b>" data-original-title="Twitter Bootstrap Popover">
-      <img src="assets/calendar.png" alt="calendar"/>
-    </a>
-  </li>
+<ul class="nav nav-tabs">
+  <li><a href="#calendar" data-toggle="tab">Calendar</a></li>
+  <li><a href="#tweets" data-toggle="tab">Latest Tweets</a></li>
+  <li><a href="#pictures" data-toggle="tab">Latest Pictures</a></li>
+  <li><a href="#videos" data-toggle="tab">Latest Videos</a></li>
+  <li><a href="#blogs" data-toggle="tab">Latest Blogs</a></li>
+
 </ul>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="calendar">
+    <div class="row">
+      <div class="span4">
+        <a href='/calendar' class="thumbnail" rel="popover"  data-content="Click to see all conferences and events in calendar view. If you interested in some of them you van" data-original-title="Calendar of events">
+          <img src="assets/calendar.png" alt="calendar"/>
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="tab-pane" id="tweets">
+    <table class="table table-striped">
+
+      <%  tweets = Tweet.find(:all, :limit => 5, :order => 'created_at desc') %>
+
+      <% tweets.each do |t| %>
+
+        <tr><td>
+            <blockquote>
+              <%= t.content %>
+              <div class="from">&mdash; @<%= t.screen_name %></div>
+            </blockquote>
+          </td></tr>
+      <% end %>
+    </table>
+  </div>
+  <div class="tab-pane" id="pictures">
+    some pictures
+  </div>
+
+  <div class="tab-pane" id="videos">
+    some videos
+  </div>
+
+  <div class="tab-pane" id="blogs">
+    some blogs
+  </div>
+</div>
+
+<br/>
 
 <br/>
 
 
-<a data-content="And here's some amazing content. It's very engaging. right?" rel="popover" class="btn danger" href="#" data-original-title="A title">hover for popover</a>
 
 <script type='text/javascript'>
   $(document).ready(function () {
@@ -46,7 +92,7 @@
 
 
 
-<a href="#asdf" rel="tooltip" title="asdf1">asdf</a>
+
 
 
 
@@ -70,7 +116,10 @@
     </tr>
   </thead>
   <tbody>
-    <% @characters.each do |character| %>
+<% counter = 0%>    
+<% @characters.each do |character| %>
+    
+      
       <tr>
 
         <td ><%= character.name %></td>
@@ -80,18 +129,20 @@
 
         <td>
           <%= link_to t('.show details', :default => t("helpers.links.show")),
-            character_path(character), :class => 'btn btn-mini btn-info'
-        %>
-          <a  data-toggle="modal" href="#myModal" >  &nbsp;&nbsp;See more</a>
-          <%= content_tag :div, :class => "modal hide", :id => "myModal" do -%>
+            character_path(character), :class => 'btn btn-mini btn-info'%>
 
 
+          <%= content_tag :a, :href => "#myModal#{counter}",  :data => {:toggle => "modal"} do -%>
+            See more
+          <%end%>
+            
+          <%= content_tag :div, :class => "modal hide", :id => "myModal#{counter}" do -%>
             <%= content_tag :div, :class => "modal-header" do -%>
-              <%= content_tag :button, :class => "close", :type => "button", :data => {:dismiss => 'modal'} do -%>
+              <%= content_tag :button, :class => "close", :type => "button", :data => {:dismiss => "modal"} do -%>
                 ×
               <% end  %>
               <%= content_tag :h3 do -%>
-                <%= character.name %> Placed at: <%= character.address %>
+                <%= @characters[counter].name %> Placed at: <%= @characters[counter].address %>
               <% end -%>
             <% end -%>
 
@@ -102,9 +153,9 @@
 
 
 
-                <% if character.event_details.any? %>
+                <% if @characters[counter].event_details.any? %>
                   <ul>
-                    <% for e in character.event_details %>
+                    <% for e in @characters[counter].event_details %>
                       <li><%= e.title %> (<%= e.description %>)</li>
                     <% end %>
                   </ul>
@@ -120,7 +171,7 @@
               <% end -%>
             <% end -%>    
             <%= content_tag :div, :class => "modal-footer" do -%>
-              <%= content_tag :a, :class => "btn", :href => '#', :data => {:dismiss => 'modal'} do -%>
+              <%= content_tag :a, :class => "btn", :href => '#', :data => {:dismiss => "modal"} do -%>
                 close
               <% end -%>
             <% end -%>    
@@ -129,7 +180,7 @@
 
         </td>
       </tr>
-
+<%counter +=1%>
     <% end %>
 
 

@@ -1,10 +1,10 @@
 class Character < ActiveRecord::Base
   
-  attr_accessible :address, :gmaps, :latitude, :longitude, :name, :id, :user_id, :event_details_attributes
+  attr_accessible :address, :gmaps, :latitude, :longitude, :name, :id, :user_id, :event_details_attributes, :event_details
   belongs_to :user, :inverse_of => :characters
   has_many :event_details
   
-  accepts_nested_attributes_for :event_details
+  accepts_nested_attributes_for :event_details, allow_destroy: true
   acts_as_gmappable
   
   validates_presence_of :name, :address
@@ -15,12 +15,14 @@ class Character < ActiveRecord::Base
              :conditions => ['name like ? or address like ?', "%#{search}%", "%#{search}%"],
              :order => "created_at desc"
   end
+  
+  
 
   def gmaps4rails_address
     address
   end
   def gmaps4rails_infowindow
-      "#{name}<br/><a class='label label-info' data-toggle='modal' href='#myModal' >more details</a>"# add here whatever html content you desire, it will be displayed when users clicks on the marker
+    "#{name}"# add here whatever html content you desire, it will be displayed when users clicks on the marker
        
   end
   def gmaps4rails_marker_picture

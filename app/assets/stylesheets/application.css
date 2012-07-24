@@ -51,3 +51,7 @@ em.current {
   /* background-color: lighten(@blue, 45%); */
   width: 10px;
 }
+.centralizeText{
+    text-align: center
+        
+}

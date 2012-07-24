@@ -13,5 +13,5 @@
 //= require jquery
 //= require jquery_ujs
 //= require twitter/bootstrap
-//= require_directory .
-
+//= require jquery.nested-fields
+//= require_tree .

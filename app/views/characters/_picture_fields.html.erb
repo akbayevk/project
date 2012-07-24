@@ -1,9 +1,11 @@
-<fieldset>
+<fieldset class="item">
 
   <%= f.label :url, "Picture URL" %>
   <%= f.text_field :url%>
-  <%= f.check_box :_destroy %>
-  <%= f.label :_destroy, "remove" %>
+ 
+  <a href="#" class="remove" data-confirm="Are you sure?">remove</a>
 
+  <%= f.hidden_field :id %>
+  <%= f.hidden_field :_destroy %>
 
 </fieldset>

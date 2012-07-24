@@ -1,4 +1,5 @@
-<fieldset>
+
+ <li class="event_detail">
   <%= f.label :title, "Title" %> <br/>
 
   <%= f.text_field :title%><br/>
@@ -8,12 +9,26 @@
   <%= f.date_select :from, :class => 'date_select' %><br/>
   <%= f.label :to, "To" %><br/>
   <%= f.date_select :to, :class => 'date_select' %>
+  <h3>Pictures</h3>
+  <div class="nested-level-2">
+    <ul class="pictures-container">
+      <%= f.nested_fields_for :pictures, new_item_index: 'new_picture_item', html: { class: "picture-form" } do |f| %>
+        <li class="picture">
+          <%= f.label :url %>
+          
+          <%= f.text_field :url %>
 
-  <%= f.fields_for :pictures do |builder| %>
+          <a href="#" class="picture-remove">remove</a>
 
-    <%= render 'picture_fields', f: builder %>
+          <%= f.hidden_field :id %>
+          <%= f.hidden_field :_destroy %>
+        </li>
+      <% end %>
+    </ul>
+    <a href="#" class="picture-add">Add Resource</a>
+  </div>
+  <a href="#" class="task-remove">remove</a>
 
-  <% end %>
-
-<%= link_to_add_fields "Add Picture", f, :pictures %>
-</fieldset>
+  <%= f.hidden_field :id %>
+  <%= f.hidden_field :_destroy %>
+</li>

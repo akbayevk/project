@@ -7,5 +7,8 @@ has_many :pictures
 
 accepts_nested_attributes_for :pictures, allow_destroy: true
 
+has_many :tweets
+  
+accepts_nested_attributes_for :tweets, allow_destroy: true
   
 end

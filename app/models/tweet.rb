@@ -16,6 +16,18 @@ class Tweet < ActiveRecord::Base
     end
   end
   
+  def Tweet.delete_bad_records(id, from,to)
+    tweets = Tweet.find_all_by_event_detail_id (id)
+    if tweets.empty?
+    else
+      tweets.each do |t|
+        if (t.tweet_created_date < from || t.tweet_created_date > to)
+          t.destroy
+        end
+      end
+
+  end
+  
 #  def self.update_tweets(id, from, to)
 #    
 #    tweets = Tweet.find_all_by_event_detail_id (id)
@@ -25,4 +37,5 @@ class Tweet < ActiveRecord::Base
 #     end
 #      
 #  end
+end
 end

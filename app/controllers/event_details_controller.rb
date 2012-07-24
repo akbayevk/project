@@ -69,7 +69,9 @@ class EventDetailsController < ApplicationController
   def create
     
     @event_detail = EventDetail.new(params[:event_detail])
-    t_account = User.find(Character.find(@event_detail.character_id).user_id).twitter
+    
+     t_account = User.find(Character.find(@event_detail.character_id).user_id).twitter
+     Tweet.set_tweets(t_account, @event_detail.id)     
     
     calendar = Event.new
     calendar.id = @event_detail.character_id
@@ -79,11 +81,10 @@ class EventDetailsController < ApplicationController
     calendar.character_id = @event_detail.character_id
     calendar.save
     
-    Tweet.set_tweets(t_account, @event_detail.id)     
-    
-    
     respond_to do |format|
       if @event_detail.save
+       
+       # Tweet.delete_bad_records(@event_detail.id, @event_detail.from, @event_detail.to)
         format.html { redirect_to event_detail_path(@event_detail.character_id), notice: 'Event detail was successfully created.' }
         format.json { render json: @event_detail, status: :created, location: @event_detail }
       else

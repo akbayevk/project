@@ -7,7 +7,7 @@
 
     <title>Academics Abroad</title>
     <%= stylesheet_link_tag "application"%>
-    <%= stylesheet_link_tag 'gmaps4rails' %>
+    <%= stylesheet_link_tag "gmaps4rails" %>
     <%= stylesheet_link_tag "event_calendar" %>
 
     <%= javascript_include_tag "application" %>
@@ -16,6 +16,8 @@
     <%= javascript_include_tag "bootstrap-modal" %>
     <%= javascript_include_tag "bootstrap-tooltip" %>
     <%= javascript_include_tag "bootstrap-popover" %>
+    
+      
     <%= csrf_meta_tags %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     
@@ -59,13 +61,13 @@
           <%= content_tag :div, msg, :id => "flash_#{name}" if msg.is_a?(String) %>
         </div>
       <% end %>
-
+ 
       <%= yield %>
-      <%= yield :scripts %>
+    <%= yield :scripts %>
 
+</div>
 
-
-    </div>
+   
 
   </body>
 </html>

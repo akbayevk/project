@@ -15,8 +15,10 @@
   <dd>
     <table>
     
-    <% tweets =  Tweet.find_all_by_screen_name(User.find(Character.find(@event_detail.character_id).user_id).twitter, :conditions =>["date(created_at) BETWEEN ? AND ? ", @event_detail.from ,@event_detail.to]) %>
- <% tweets.each do |t| %>
+  <% tweets =  Tweet.find_all_by_screen_name(User.find(Character.find(@event_detail.character_id).user_id).twitter, :conditions =>["date(tweet_created_date) BETWEEN ? AND ? ", @event_detail.from ,@event_detail.to]) %>
+      
+      <% tweets.each do |t| %>
+      
       <tr><td>
     <blockquote>
       <%= t.content %>
@@ -29,8 +31,17 @@
   
    
   
-  
-  
+  <dt><strong>
+    Pictures
+  </strong></dt>
+  <% @event_detail.pictures.each do |p| %>
+  <dd>
+    <a href="http://www.flickr.com/photos/akbayevk/7628705214/" title="img_3340 by akbayevk, on Flickr">
+      <img src="http://farm9.staticflickr.com/8001/7628705214_b73602539a_n.jpg" width="320" height="213" alt="img_3340">
+    </a>
+  </dd>
+  <br/>
+  <% end %>
   <dt><strong><%= model_class.human_attribute_name(:from) %>:</strong></dt>
   <dd><%= @event_detail.from %></dd>
   <dt><strong><%= model_class.human_attribute_name(:to) %>:</strong></dt>
