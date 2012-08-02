@@ -31,15 +31,12 @@ class EventDetailsController < ApplicationController
         redirect_to character_path(params[:id])
       end
     
-  else
-      t_account = User.find(Character.find(@event_detail.character_id).user_id).twitter
-    
-    #  Tweet.update_tweets(@event_detail.character_id, t_account, @event_detail.from, @event_detail.to)
-    
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @event_detail }
-    end
+    else
+       
+      respond_to do |format|
+        format.html # show.html.erb
+        format.json { render json: @event_detail }
+      end
     end
     
   end
@@ -69,12 +66,7 @@ class EventDetailsController < ApplicationController
   def create
     
     @event_detail = EventDetail.new(params[:event_detail])
-    
-     t_account = User.find(Character.find(@event_detail.character_id).user_id).twitter
-     Tweet.set_tweets(t_account, @event_detail.id)     
-    
     calendar = Event.new
-    calendar.id = @event_detail.character_id
     calendar.start_at = DateTime.parse(@event_detail.from.to_s)
     calendar.end_at = DateTime.parse(@event_detail.to.to_s)
     calendar.name = @event_detail.title
@@ -84,7 +76,6 @@ class EventDetailsController < ApplicationController
     respond_to do |format|
       if @event_detail.save
        
-       # Tweet.delete_bad_records(@event_detail.id, @event_detail.from, @event_detail.to)
         format.html { redirect_to event_detail_path(@event_detail.character_id), notice: 'Event detail was successfully created.' }
         format.json { render json: @event_detail, status: :created, location: @event_detail }
       else
@@ -101,9 +92,9 @@ class EventDetailsController < ApplicationController
 
     respond_to do |format|
       if @event_detail.update_attributes(params[:event_detail])
-        #updating all relevant dates and tables
-      #  Tweet.update_tweets(id, name, from, to)
-      Event.update_dates(@event_detail.character_id, @event_detail.from, @event_detail.to)
+        
+        Event.update_dates(@event_detail.character_id, @event_detail.from, @event_detail.to)
+      
         
         format.html { redirect_to event_detail_path(@event_detail.character_id), notice: 'Event detail was successfully updated.' }
         format.json { head :no_content }
@@ -113,11 +104,57 @@ class EventDetailsController < ApplicationController
       end
     end
   end
+  
+  def update_tweets
+    
+    e = EventDetail.find(params[:id])
+    if e != nil
+      
+       t_account = User.find(
+      Character.find(
+        e.character_id
+      ).user_id
+    ).twitter
+    if Tweet.find_all_by_event_detail_id(params[:id]).any?
+      
+      t = Tweet.find_all_by_event_detail_id(params[:id]).last
+      check_date = Date.parse(t.updated_at.to_s)
+      if Date.today == check_date
+        redirect_to event_detail_path(e.character_id), notice: 'You cannot update tweets today. Try tomorrow!'
+      
+    else
+      Tweet.set_tweets(t_account, e.id)    
+      Tweet.delete_bad_records(e.id, e.from, e.to)
+      redirect_to event_detail_path(e.character_id), notice: 'Succesfully updated!'
+      end
+    else
+      Tweet.set_tweets(t_account, e.id)    
+     # Tweet.delete_bad_records(e.id, e.from, e.to)
+     redirect_to event_detail_path(e.character_id), notice: 'Succesfully set!'
+     
+    end
+    
+    else
+      redirect_to request.referer, notice: "Couldn't  find this!"
+    end
+   
+    
+    #updating all relevant dates and tables
+        #  Tweet.update_tweets(id, name, from, to)
+        
+      #  Tweet.set_tweets(t_account, @event_detail.id)    
+       # Tweet.delete_bad_records(@event_detail.id, @event_detail.from, @event_detail.to)
+        
+   # Tweet.set_tweets(t_account, @event_detail.id)    
+    #Tweet.delete_bad_records(@event_detail.id, @event_detail.from, @event_detail.to)
+  end
 
   # DELETE /event_details/1
   # DELETE /event_details/1.json
   def destroy
     @event_detail = EventDetail.find(params[:id])
+    @event_detail.tweets.destroy
+    @event_detail.pictures.destroy
     @event_detail.destroy
 
     respond_to do |format|
@@ -125,4 +162,5 @@ class EventDetailsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
 end

@@ -3,12 +3,11 @@ attr_accessible :blogs, :description, :character_id,  :title, :from, :to, :pictu
    
 belongs_to :character
 
-has_many :pictures
+has_many :pictures, :dependent => :delete_all
+has_many :tweets, :dependent => :delete_all
 
-accepts_nested_attributes_for :pictures, allow_destroy: true
 
-has_many :tweets
-  
-accepts_nested_attributes_for :tweets, allow_destroy: true
+accepts_nested_attributes_for :pictures, :tweets,  :allow_destroy => true
+
   
 end

@@ -1,4 +1,12 @@
 ActiveAdmin::Dashboards.build do
+  section "Recent Places" do
+    table_for Character.order("created_at desc").limit(10) do
+      column :name
+      column :address
+      column :created_at
+    end
+    strong {link_to "View all places", admin_characters_path}
+  end
 
   # Define your dashboard sections here. Each block will be
   # rendered on the dashboard in the context of the view. So just

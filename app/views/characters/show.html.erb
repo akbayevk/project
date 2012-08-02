@@ -1,39 +1,125 @@
 <%- model_class = @character.class -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+
+  <h1>Event: <%= @character.name %> </h1><span class="navbar brand">Location: <%= @character.address %></span>
 </div>
- 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
-  <dd><%= @character.name %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:address) %>:</strong></dt>
-  <dd><%= @character.address %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:longitude) %>:</strong></dt>
-  <dd><%= @character.longitude %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:latitude) %>:</strong></dt>
-  <dd><%= @character.latitude %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:gmaps) %>:</strong></dt>
-  <dd><%= @character.gmaps %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:user_id) %>:</strong></dt>
-  <dd><%= User.find(@character.user_id).name %></dd>
-</dl>
+
+<div class="row ">
+  <div class="span3 well">
+    <dl class="dl-horizontal ">
+      
+      <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
+      <dd><%= @character.name %></dd>
+      <dt><strong><%= model_class.human_attribute_name(:address) %>:</strong></dt>
+      <dd><%= @character.address %></dd>
+      <dt><strong><%= model_class.human_attribute_name(:longitude) %>:</strong></dt>
+      <dd><%= @character.longitude %></dd>
+      <dt><strong><%= model_class.human_attribute_name(:latitude) %>:</strong></dt>
+      <dd><%= @character.latitude %></dd>
+      <dt><strong><%= model_class.human_attribute_name(:gmaps) %>:</strong></dt>
+      <dd><%= @character.gmaps %></dd>
+      <dt><strong><%= model_class.human_attribute_name(:user_id) %>:</strong></dt>
+      <dd><%= User.find(@character.user_id).name %></dd>
+    </dl>
+  </div>
+  <div class="span8">
+    
+    
+      
+      <% if @character.event_details.any? %>
+        <% for event in @character.event_details %>
+          <h3><%= event.title %></h3>
+          <div class="accordion">
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a href="#" data-toggle="collapse" data-target="#description">Description of the event</a>
+              
+            </div>
+            <div id="description" class="accordion-body in collapse">
+              <%= event.description  %>
+            </div>
+          </div>
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a href="#" data-toggle="collapse" data-target="#tweets">Tweets from academic about the event</a>
+            </div>
+            <div id="tweets" class="accordion-body collapse">
+              tweets
+            </div>
+            
+          </div>
+             <div class="accordion-group">
+            <div class="accordion-heading">
+              <a href="#" data-toggle="collapse" data-target="#pictures">Pictures from academic of the event</a>
+            </div>
+            <div id="pictures" class="accordion-body collapse">
+              
+          <ul class="thumbnails">
+            <% if event.pictures.any? %>
+              <% for picture in event.pictures %>
+                <% pictures = URI.extract(picture.url) %>
+                <%= content_tag :li,  :class => "span2"  do -%>
+
+
+                  <%= content_tag :a, :href => "#{pictures[0]}", :class => "thumbnail"  do -%>
+                    <%= content_tag :img, :src => "#{pictures[1]}"  do -%>
+
+                    <%end%>
+                  <%end%>
+                <%end%>
+
+              <% end %>
+            <% else %>
+              <p>No pictures yet</p>
+            <% end %>
+          </ul>
+
+            </div>
+            
+          </div>
+             <div class="accordion-group">
+            <div class="accordion-heading">
+              <a href="#" data-toggle="collapse" data-target="#videos">Videos from academic of the event</a>
+            </div>
+            <div id="videos" class="accordion-body collapse">
+              vids
+            </div>
+             </div>
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a href="#" data-toggle="collapse" data-target="#blogs">Videos from academic of the event</a>
+            </div>
+            <div id="blogs" class="accordion-body collapse">
+              vids
+            </div>
+             </div>
+            </div>
+          <%end%>
+        <% else %>
+          <p>This event has no info yet.</p>
+        <% end %>
+     
+  
+  </div>
+</div>
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
-              request.referer, :class => 'btn'  %>
+    request.referer, :class => 'btn'  %>
   <%= link_to t('event_detail.show', :default => t("helpers.links.more_details")),
-            event_detail_path(@character), :class => 'btn' %>
-  <% if (session[:user_id] != nil && @character.user_id == session[:user_id]) %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_character_path(@character), :class => 'btn' %>
+    event_detail_path(@character), :class => 'btn' %>
   
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              character_path(@character),
-              :method => 'delete',
-              :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-              :class => 'btn btn-danger' %>
- <% end%>
-  
+<% if (session[:user_id] != nil && @character.user_id == session[:user_id]) %>
+    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+      edit_character_path(@character), :class => 'btn' %>
+
+    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+      character_path(@character),
+      :method => 'delete',
+      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+      :class => 'btn btn-danger pull-right' %>
+  <% end%>
+
 </div>
 
-  
+

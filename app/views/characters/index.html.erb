@@ -5,25 +5,15 @@
 <%= gmaps(
   "map_options" => {"auto_adjust" => "true", "bounds" => '[{"lat": 0, "lng": 0 }, {"lat": 80 , "lng": 100 }]'},
   "markers" => {"data" => @json,
-  "options" => {"do_clustering" => true}},
+    "options" => {"do_clustering" => true}},
   "polylines" => {"data" => @p}
 ) %>  
 
 <br/>
 
 <br/>
-<script type="text/javascript">
-  $().modal({
-    keyboard: false
-  })
- 
-</script>
-<br/>  
-<script type="text/javascript">
-  (function() {
-    $("[rel=popover]").popover();
-  })();
-</script>
+
+
 <ul class="nav nav-tabs">
   <li><a href="#calendar" data-toggle="tab">Calendar</a></li>
   <li><a href="#tweets" data-toggle="tab">Latest Tweets</a></li>
@@ -48,7 +38,7 @@
   <div class="tab-pane" id="tweets">
     <table class="table table-striped">
 
-      <%  tweets = Tweet.find(:all, :limit => 5, :order => 'created_at desc') %>
+      <%  tweets = Tweet.find(:all, :group => 'event_detail_id', :limit => 5, :order => 'created_at desc') %>
 
       <% tweets.each do |t| %>
 
@@ -57,7 +47,11 @@
               <%= t.content %>
               <div class="from">&mdash; @<%= t.screen_name %></div>
             </blockquote>
+          </td>
+          <td>
+            <%= link_to "more..", event_detail_path(EventDetail.find(t.event_detail_id).character_id) %>
           </td></tr>
+
       <% end %>
     </table>
   </div>
@@ -88,6 +82,8 @@
       });
     }
   });
+  
+  
 </script>
 
 
@@ -101,7 +97,7 @@
     <tr>
       <td colspan="4">
         <%= form_tag characters_path, :method => 'get', :class => 'navbar-search' do %>   
-          <%= text_field_tag :search, params[:search], :class => 'search-query', :placeholder => 'Search Places' %>
+          <%= text_field_tag :search, params[:search], :class => 'span5', :placeholder => 'Type To Search Places' %>
         <% end %></td>
 
     </tr>
@@ -116,10 +112,10 @@
     </tr>
   </thead>
   <tbody>
-<% counter = 0%>    
-<% @characters.each do |character| %>
-    
-      
+    <% counter = 0%>    
+    <% @characters.each do |character| %>
+
+
       <tr>
 
         <td ><%= character.name %></td>
@@ -135,14 +131,16 @@
           <%= content_tag :a, :href => "#myModal#{counter}",  :data => {:toggle => "modal"} do -%>
             See more
           <%end%>
-            
+
           <%= content_tag :div, :class => "modal hide", :id => "myModal#{counter}" do -%>
             <%= content_tag :div, :class => "modal-header" do -%>
               <%= content_tag :button, :class => "close", :type => "button", :data => {:dismiss => "modal"} do -%>
                 ×
               <% end  %>
               <%= content_tag :h3 do -%>
-                <%= @characters[counter].name %> Placed at: <%= @characters[counter].address %>
+                <h4>Event: <%= @characters[counter].name %> </h4><span class="navbar brand">Location: <%= @characters[counter].address %></span>       
+
+
               <% end -%>
             <% end -%>
 
@@ -151,16 +149,108 @@
 
 
 
-
+                <!-- nado sdes vse HTML TAGS zamenit s content_tag potomu 4to u vse odin i tot je href i id of div !-->
 
                 <% if @characters[counter].event_details.any? %>
-                  <ul>
-                    <% for e in @characters[counter].event_details %>
-                      <li><%= e.title %> (<%= e.description %>)</li>
-                    <% end %>
-                  </ul>
+
+                  <% for e in @characters[counter].event_details %>
+                    <h5><%= e.title %></h5>
+                    <ul class="nav nav-tabs">
+                      <li>
+
+                        <%= content_tag :a, :href => "#modal-description#{counter}",  :data => {:toggle => "tab"} do -%>
+                          Description
+                        <%end%>
+                      </li>
+                      <li>
+                        <%= content_tag :a, :href => "#modal-tweets#{counter}",  :data => {:toggle => "tab"} do -%>
+                          Event Tweets
+                        <%end%>
+
+                      </li>
+                      <li>
+                        <%= content_tag :a, :href => "#modal-pictures#{counter}",  :data => {:toggle => "tab"} do -%>
+                          Event Pictures
+                        <%end%>
+
+                      </li>
+                      <li>
+                        <%= content_tag :a, :href => "#modal-videos#{counter}",  :data => {:toggle => "tab"} do -%>
+                          Event Videos
+                        <%end%>
+
+                      </li>
+                      <li>
+                        <%= content_tag :a, :href => "#modal-blogs#{counter}",  :data => {:toggle => "tab"} do -%>
+                          Event Blogs
+                        <%end%>
+
+                      </li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                      <%= content_tag :div, :class => "tab-pane active", :id => "modal-description#{counter}" do -%>
+                        <%= e.description %>  
+                      <%end%>
+
+
+                      <%= content_tag :div, :class => "tab-pane", :id => "modal-tweets#{counter}" do -%>
+                        <%  if e.tweets.any? %>
+                          <% e.tweets.each do |t| %>
+                            <p>
+                              <%= t.content %>
+                            </p>
+                          <% end %>
+                        <% else %>
+                          <p>no tweets</p>
+                        <% end %>
+                      <%end%>
+
+
+                      <%= content_tag :div, :class => "tab-pane", :id => "modal-pictures#{counter}" do -%>
+                        <%  if e.pictures.any? %>
+                          <% e.pictures.each do |p| %>
+
+                            <% pictures = URI.extract(p.url) %>
+                            <%= content_tag :div,  :class => "span2"  do -%>
+
+
+                              <%= content_tag :a, :href => "#{pictures[0]}", :class => "thumbnail"  do -%>
+                                <%= content_tag :img, :src => "#{pictures[1]}"  do -%>
+
+                                <%end%>
+                              <%end%>
+                            <%end%>
+                          <%end%>
+                        <% else %>
+                          <p>No pictures yet</p>
+                        <% end %>
+
+                      <%end%> 
+
+
+
+
+                      <%= content_tag :div, :class => "tab-pane", :id => "modal-videos#{counter}" do -%>
+                        vids
+                      <%end%>
+                         <%= content_tag :div, :class => "tab-pane", :id => "modal-blogs#{counter}" do -%>
+                        blogs
+                      <%end%>
+
+
+
+                    </div>
+
+
+
+
+                  <% end %>
+
                 <% else %>
-                  <p>This person has no phones yet.</p>
+                  <p>This event has no details yet.</p>
                 <% end %>
 
 
@@ -180,7 +270,7 @@
 
         </td>
       </tr>
-<%counter +=1%>
+      <%counter +=1%>
     <% end %>
 
 

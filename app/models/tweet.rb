@@ -27,15 +27,5 @@ class Tweet < ActiveRecord::Base
       end
 
   end
-  
-#  def self.update_tweets(id, from, to)
-#    
-#    tweets = Tweet.find_all_by_event_detail_id (id)
-#      #, :conditions =>["date(created_at) BETWEEN ? AND ? ", from ,to])
-#     tweets.each do |t|
-#       t.
-#     end
-#      
-#  end
 end
 end

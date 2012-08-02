@@ -1,42 +1,52 @@
+
+
 <%= form_for @event_detail, :html => { :class => 'form-horizontal' } do |f| %>
-  
-      
+  <div class="field">
     
-<div class="control-group">
-    <%= f.label :character_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :character_id, :class => 'number_field', :readonly => true %>
+    
+        <%= f.hidden_field :character_id %>
+    
+    <div class="control-group">
+      <%= f.label :title, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :title, :class => 'text_field' %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :description, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_area :description, :class => 'input-xlarge', :rows => '5' %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :from, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.date_select :from, :class => 'date_select' %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :to, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.date_select :to, :class => 'date_select' %>
+      </div>
     </div>
   </div>
-  <div class="control-group">
-    <%= f.label :title, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :title, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :description, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :description, :class => 'text_field' %>
-    </div>
-  </div>
-  
-  <div class="control-group">
-    <%= f.label :from, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.date_select :from, :class => 'date_select' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :to, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.date_select :to, :class => 'date_select' %>
-    </div>
-  </div>
+
+  <%= f.fields_for :pictures do |builder| %>
+    <%= render 'picture_fields', f: builder %>
+    
+  <% end %>
+
+
+
+
+
+
 
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                event_details_path, :class => 'btn' %>
+      event_details_path, :class => 'btn' %>
+    <%= link_to  %>
   </div>
 <% end %>

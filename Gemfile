@@ -12,9 +12,7 @@ gem 'mysql2'
 gem 'oauth'
 gem 'twitter'
 gem 'activeadmin'
-gem 'awesome_nested_fields', '0.6.0'
-
-
+gem 'awesome_nested_fields'
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -1,25 +1,19 @@
+<div class="row">
 
-<div>
+  <div class="span6 offset3">
+    <div class="well  form-horizontal">
   <% if flash[:alert] %>
-      <p><%= flash[:alert] %></p>
+    <p><%= flash[:alert] %></p>
   <% end %>
   <%= form_tag do %>
-      <fieldset>
-        <legend>LOG IN</legend>
-        <table>
-          <tr>
-            <td><label>name:</label></td>
-            <td><%= text_field_tag :name, params[:name] %></td>
-          </tr>
-          <tr>
-            <td><label>password:</label></td>
-            <td><%= password_field_tag :password, params[:password] %></td>
-          </tr>
 
-          <tr>
-            <td colspan="2"><%= submit_tag "login" %></td>
-          </tr>
-        </table>
-      </fieldset>
+    <%= text_field_tag :name, params[:name], :class => "input-medium", :placeholder => "username" %>
+
+    <%= password_field_tag :password, params[:password], :class => "input-medium", :placeholder => "password" %>
+    <%= submit_tag "Log In", :class => "btn btn-info" %>
+
+
   <% end %>
+</div>
+</div>
 </div>

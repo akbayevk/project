@@ -8,6 +8,7 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
+
  *= require_self
  *= require_directory .
 
@@ -54,4 +55,14 @@ em.current {
 .centralizeText{
     text-align: center
         
+}
+.textToRight{
+    text-align: right;
+    right: 100px; 
+}
+.textToLeft{
+    text-align: left;
+}
+.accordion-group{
+    padding: 7px;
 }

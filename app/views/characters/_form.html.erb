@@ -1,18 +1,17 @@
-
 <%= simple_form_for @character, :html => { :class => 'form-horizontal' } do |f| %>
 <div class="field">
     <%= f.input :name %>
     <%= f.input :address %>
-  
-   <h2>Event Details</h2>
-    <ol class="event_details-container">
-      <%= f.nested_fields_for :event_details, render_template: false, new_item_index: 'new_event_detail_item' do |f| %>
-        <%= render 'event_fields', f: f %>
-      <% end %>
-    </ol>
-    <%= nested_fields_templates %>
+  <div class="offset2">
+   
+    <% if @character.event_details.any? %>
+    <h4>Event Details</h4>
+    <% end  %>
+      <%= f.fields_for :event_details do |builder| %>
+      <%= render 'event_fields', f: builder %>
+    <% end %>
+    </div>
     
-  
   
 </div>  
 
@@ -22,3 +21,4 @@
                 characters_path, :class => 'btn' %>
   </div>
 <% end %>
+

@@ -1,63 +1,75 @@
 <%- model_class = @event_detail.class -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+  <h1><%= @event_detail.title %></h1>
+  
+  <span class="navbar brand"><b>FROM: </b> <%= @event_detail.from %> <b> TO: </b> <%= @event_detail.to %></span>
 </div>
-
-<dl class="dl-horizontal">
-  
-  <dt><strong><%= model_class.human_attribute_name(:title) %>:</strong></dt>
-  <dd><%= @event_detail.title %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
-  <dd><%= @event_detail.description %></dd>
-  <dt><strong>tweets</strong></dt>
-  
-  
-  <dd>
-    <table>
+<div class="row">
+  <div class="span3">
+    <blockquote class="pull-left">
+      <p><%= @event_detail.description %></p>
+      
+    </blockquote>
+    
+  </div>
+  <div class="span6">
+    <div class="well">
+    Pictures
+  </div>
+  </div>
+  <div class="span3">
+    
+     <table class="table table-bordered">
     
   <% tweets =  Tweet.find_all_by_screen_name(User.find(Character.find(@event_detail.character_id).user_id).twitter, :conditions =>["date(tweet_created_date) BETWEEN ? AND ? ", @event_detail.from ,@event_detail.to]) %>
       
       <% tweets.each do |t| %>
       
-      <tr><td>
-    <blockquote>
-      <%= t.content %>
-      <div class="from">&mdash; @<%= t.screen_name %></div>
+    <tr><td>
+    <blockquote class="pull-right">
+      <p> <%= t.content %></p>
+      <small>@<%= t.screen_name %></small>
     </blockquote>
-          </td></tr>
+          
+    </td></tr>
     <% end %>
       </table>
-  </dd>
-  
-   
-  
-  <dt><strong>
-    Pictures
-  </strong></dt>
-  <% @event_detail.pictures.each do |p| %>
-  <dd>
-    <a href="http://www.flickr.com/photos/akbayevk/7628705214/" title="img_3340 by akbayevk, on Flickr">
-      <img src="http://farm9.staticflickr.com/8001/7628705214_b73602539a_n.jpg" width="320" height="213" alt="img_3340">
-    </a>
-  </dd>
-  <br/>
-  <% end %>
-  <dt><strong><%= model_class.human_attribute_name(:from) %>:</strong></dt>
-  <dd><%= @event_detail.from %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:to) %>:</strong></dt>
-  <dd><%= @event_detail.to %></dd>
-</dl>
+    <div>
+  <% if (session[:user_id] != nil && Character.find(@event_detail.character_id).user_id == session[:user_id]) %>
+      
+   <% 
+   button_value = "Set Tweets"
+   if (@event_detail.tweets.any?) 
+      button_value = "Update Tweets"
+   end
+   %>
+      
+      
+       
+      
+      
+      
+      <%= button_to "#{button_value}", {:action => "update_tweets", :id => @event_detail.id}, :class => "btn-info", :rel => "popover", :data => {:content => "You can update tweets only once a day."} %>
+  <%end%>
+</div>
+
+  </div>
+</div>
+
+<br/><br/>
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               request.referer, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+<% if (session[:user_id] != nil && Character.find(@event_detail.character_id).user_id == session[:user_id]) %>  
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
               edit_event_detail_path(@event_detail), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+ 
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
               event_detail_path(@event_detail),
               :method => 'delete',
               :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-              :class => 'btn btn-danger' %>
- 
+              :class => 'btn btn-danger pull-right' %>
+<%end%> 
 </div>
 

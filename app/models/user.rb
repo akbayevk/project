@@ -3,7 +3,7 @@ require 'digest/sha2'
 class User < ActiveRecord::Base
   
   has_many :characters, :inverse_of => :user
-  has_one :role
+  belongs_to :role
 
   validates :name, :presence => true, :uniqueness => true
   validates :password, :confirmation => true
@@ -11,9 +11,6 @@ class User < ActiveRecord::Base
   
   attr_accessible :name, :password, :password_confirmation
   attr_reader   :password
-  
-
-  
   
   def User.authenticate(name, password)
     if user = find_by_name(name)

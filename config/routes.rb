@@ -1,21 +1,32 @@
 Gmaps::Application.routes.draw do
 
+ 
+
   match '/calendar(/:year(/:month))' => 'calendar#index', :as => :calendar, :constraints => {:year => /\d{4}/, :month => /\d{1,2}/}
 
-  match "/events/:id" => "event_details#show"
+ 
+resources :events
+  
+   
+  
 
   ActiveAdmin.routes(self)
 
   devise_for :admin_users, ActiveAdmin::Devise.config
 
   resources :event_details
-  
+  controller :event_details do
+     get 'update_tweets' => :update_tweets
+    post 'update_tweets' => :update_tweets
+  end
 
   controller :sessions do
   get 'login' => :new
   post 'login' => :create
   get 'logout' => :destroy
+  
   end
+  
 
 
   resources :users
@@ -25,7 +36,10 @@ Gmaps::Application.routes.draw do
   controller :characters do
     get 'user_markers' => :user_markers
     post 'user_markers' => :user_markers
+   
   end
+  
+ 
   
   controller :characters do
     get 'test' => :test

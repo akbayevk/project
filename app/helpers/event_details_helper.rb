@@ -1,2 +1,3 @@
 module EventDetailsHelper
+ 
 end

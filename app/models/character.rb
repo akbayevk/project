@@ -2,9 +2,11 @@ class Character < ActiveRecord::Base
   
   attr_accessible :address, :gmaps, :latitude, :longitude, :name, :id, :user_id, :event_details_attributes, :event_details
   belongs_to :user, :inverse_of => :characters
-  has_many :event_details
+  has_many :event_details, :dependent => :delete_all
+  has_many :events, :dependent => :delete_all
   
-  accepts_nested_attributes_for :event_details, allow_destroy: true
+  accepts_nested_attributes_for :event_details, :allow_destroy => true
+  
   acts_as_gmappable
   
   validates_presence_of :name, :address
