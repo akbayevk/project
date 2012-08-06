@@ -1,6 +1,11 @@
 
 <%- model_class = Character.new.class -%>
+<!-- 
 
+gmaps and calendar
+
+
+!-->
 <div class="row">
   <div class="span9">
     <%= gmaps(
@@ -19,7 +24,19 @@
 </div>
 <br/>
 <br/>
+<!-- 
 
+gmaps and calendar
+
+
+!-->
+
+<!-- 
+
+>>>>>latest
+
+
+!-->
 
 <ul class="nav nav-tabs">
   <li><a href="#tweets" data-toggle="tab">Latest Tweets</a></li>
@@ -119,7 +136,12 @@
 <br/>
 
 <br/>
+<!-- 
 
+>>>>>>>>>>latest
+
+
+!-->
 
 <script type='text/javascript'>
   $(document).ready(function () {
@@ -138,13 +160,15 @@
 
 
 
-
+<div class="page-header">
+  <h3>All events</h3>
+</div>
 <table class="table table-striped">
   <thead>
     <tr>
       <td colspan="4">
         <%= form_tag characters_path, :method => 'get', :class => 'navbar-search' do %>   
-          <%= text_field_tag :search, params[:search], :class => 'span5', :placeholder => 'Type To Search Places' %>
+          <%= text_field_tag :search, params[:search], :class => 'span5', :placeholder => 'Type To Search Events' %>
         <% end %></td>
 
     </tr>

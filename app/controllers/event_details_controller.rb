@@ -2,7 +2,7 @@ class EventDetailsController < ApplicationController
   # GET /event_details
   # GET /event_details.json
   
-  skip_before_filter :authorize, :only => [:index, :show]
+  skip_before_filter :authorize, :only => [:show]
   
   
   def index

@@ -6,7 +6,8 @@
 
 <div class="row ">
   <div class="span3 well">
-    <dl class="dl-horizontal ">
+    <div class="page-header"><h4>Details</h4></div>
+    <dl class="dl-horizontal">
 
       <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
       <dd><%= @character.name %></dd>
@@ -16,8 +17,6 @@
       <dd><%= @character.longitude %></dd>
       <dt><strong><%= model_class.human_attribute_name(:latitude) %>:</strong></dt>
       <dd><%= @character.latitude %></dd>
-      <dt><strong><%= model_class.human_attribute_name(:gmaps) %>:</strong></dt>
-      <dd><%= @character.gmaps %></dd>
       <dt><strong><%= model_class.human_attribute_name(:user_id) %>:</strong></dt>
       <dd><%= User.find(@character.user_id).name %></dd>
     </dl>
@@ -28,7 +27,8 @@
 
     <% if @character.event_details.any? %>
       <% for event in @character.event_details %>
-        <h3><%= event.title %></h3>
+    <div class="page-header"><h3><%= event.title %></h3></div>
+        
         <div class="accordion">
           <div class="accordion-group">
             <div class="accordion-heading">
