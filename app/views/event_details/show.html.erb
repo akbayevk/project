@@ -87,6 +87,7 @@
 <hr/>
 <div class="row">
   <div class="span6">
+    <h3>Videos</h3>
     <%  if @event_detail.videos.any? %>
       <ul class="thumbnails">
         <% @event_detail.videos.each do |v| %>
@@ -109,7 +110,19 @@
       <p>No videos yet</p>
     <% end %>
   </div>
-  <div class="span6"></div>
+  <div class="span6">
+    <h3>Blogs</h3>
+    <%  if @event_detail.blogs.any? %>
+     <% @event_detail.blogs.each do |b| %>
+                  <blockquote>
+                    <p> <%= b.url %></p>
+                    <small>@name</small>
+                  </blockquote>
+                <% end %>
+    <% else %>
+      <p>No blogs yet</p>
+    <% end %>
+  </div>
 </div>
 
 

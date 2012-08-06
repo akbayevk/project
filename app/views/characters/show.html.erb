@@ -91,15 +91,47 @@
               <a href="#" data-toggle="collapse" data-target="#videos">Videos from academic of the event</a>
             </div>
             <div id="videos" class="accordion-body collapse">
-              vids
+                    <%  if event.videos.any? %>
+      <ul class="thumbnails">
+        <% event.videos.each do |v| %>
+        
+          <%= content_tag :li, :class => "span3 thumbnail"  do -%>
+    <% if Video.is_youtube_url(v.url)%>
+          
+    
+        <%= content_tag :iframe, :width => "260", :height => "180", :src => "#{URI.extract(v.url)[0]}", :frameborder =>"0" do %>
+        <%end%>
+          
+        <% else %>
+        
+         <%= content_tag :img, :src => "assets/no_video.png"  do -%><%end%>
+        <%end%>
+        <%end%>
+        <%end%> 
+      </ul>
+    <% else %>
+      <p>No videos yet</p>
+    <% end %>
             </div>
           </div>
           <div class="accordion-group">
             <div class="accordion-heading">
-              <a href="#" data-toggle="collapse" data-target="#blogs">Videos from academic of the event</a>
+              <a href="#" data-toggle="collapse" data-target="#blogs">Blogs from academic of the event</a>
             </div>
             <div id="blogs" class="accordion-body collapse">
-              vids
+              
+               <% if event.blogs.any? %>
+                <% event.blogs.each do |b| %>
+                  <blockquote>
+                    <p> <%= b.url %></p>
+                    <small>@name</small>
+                  </blockquote>
+                <% end %>
+              <% else %>
+                <p>No blogs yet</p>
+              <% end %>
+              
+              
             </div>
           </div>
         </div>

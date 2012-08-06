@@ -3,19 +3,19 @@
 
 <div class="row">
   <div class="span9">
-<%= gmaps(
-  "map_options" => {"auto_adjust" => "true", "bounds" => '[{"lat": 0, "lng": 0 }, {"lat": 80 , "lng": 100 }]'},
-  "markers" => {"data" => @json,
-    "options" => {"do_clustering" => true}},
-  "polylines" => {"data" => @p}
-) %>  
- </div>
+    <%= gmaps(
+      "map_options" => {"auto_adjust" => "true", "bounds" => '[{"lat": 0, "lng": 0 }, {"lat": 80 , "lng": 100 }]'},
+      "markers" => {"data" => @json,
+        "options" => {"do_clustering" => true}},
+      "polylines" => {"data" => @p}
+    ) %>  
+  </div>
   <div class="span3">
     <br/><br/> <br/> <br/>
-        <a href='/calendar' class="thumbnail" rel="tooltip"  title="Click to see all conferences and events in calendar view">
-          <img src="assets/calendar.png" alt="calendar"/>
-        </a>
-       </div>
+    <a href='/calendar' class="thumbnail" rel="tooltip"  title="Click to see all conferences and events in calendar view">
+      <img src="assets/calendar.png" alt="calendar"/>
+    </a>
+  </div>
 </div>
 <br/>
 <br/>
@@ -51,30 +51,68 @@
     </table>
   </div>
   <div class="tab-pane" id="pictures">
-    
+
     <% last_pictures = Picture.find(:all, :group => 'event_detail_id', :limit => 4, :order => 'created_at desc') %>
     <ul class="thumbnails">
-    <% last_pictures.each do |lp| %>
-      <li class="span3">
-        <%  last_pics = Picture.check_url(lp.url)%>
-         <%= content_tag :a, :href => "#{last_pics[0]}", :class => "thumbnail", :rel => "tooltip", :title => "#{last_pics[0]}"  do -%>
-                                <%= content_tag :img, :src => "#{last_pics[1]}"  do -%>
+      <% last_pictures.each do |lp| %>
+        <li class="span3">
+          <%  last_pics = Picture.check_url(lp.url)%>
+          <%= content_tag :a, :href => "#{last_pics[0]}", :class => "thumbnail", :rel => "tooltip", :title => "#{last_pics[0]}"  do -%>
+            <%= content_tag :img, :src => "#{last_pics[1]}"  do -%>
 
-                                <%end%>
-                              <%end%>
-        <%= link_to "   more..", event_detail_path(EventDetail.find(lp.event_detail_id).character_id) %>
-      </li>
-      
-    <%end%>
-      </ul>
+            <%end%>
+          <%end%>
+          <%= link_to "   more..", event_detail_path(EventDetail.find(lp.event_detail_id).character_id) %>
+        </li>
+
+      <%end%>
+    </ul>
   </div>
 
   <div class="tab-pane" id="videos">
-    some videos
+    <% last_videos = Video.find(:all, :group => 'event_detail_id', :limit => 4, :order => 'created_at desc') %>
+    <ul class="thumbnails">
+      <% last_videos.each do |lv| %>
+        <li class="span3 thumbnail">
+          <% if Video.is_youtube_url(lv.url)%>
+
+
+            <%= content_tag :iframe, :width => "260", :height => "180", :src => "#{URI.extract(lv.url)[0]}", :frameborder =>"0" do %>
+            <%end%>
+
+
+          <% else %>
+
+            <%= content_tag :img, :src => "assets/no_video.png", :rel => "tooltip", :title => "unavailable video"  do -%><%end%>
+
+          <%end%>
+          <%= link_to "   more..", event_detail_path(EventDetail.find(lv.event_detail_id).character_id) %>
+        </li>
+
+      <%end%>
+    </ul>
+
+
   </div>
 
   <div class="tab-pane" id="blogs">
-    some blogs
+    <table class="table">
+
+      <%  blogs = Blog.find(:all, :group => 'event_detail_id', :limit => 5, :order => 'created_at desc') %>
+
+      <% blogs.each do |b| %>
+
+        <tr><td>
+            <blockquote>
+              <%= b.url %>
+            </blockquote>
+          </td>
+          <td>
+            <%= link_to "more..", event_detail_path(EventDetail.find(b.event_detail_id).character_id) %>
+          </td></tr>
+
+      <% end %>
+    </table>
   </div>
 </div>
 
@@ -133,7 +171,7 @@
         <td><%= User.find(character.user_id).name %></td>
 
         <td>
-         
+
 
 
           <%= content_tag :a, :href => "#myModal#{counter}",  :data => {:toggle => "modal"} do -%>
@@ -207,10 +245,10 @@
                       <%= content_tag :div, :class => "tab-pane", :id => "modal-tweets#{counter}" do -%>
                         <%  if e.tweets.any? %>
                           <% e.tweets.each do |t| %>
-                             <blockquote >
+                            <blockquote >
                               <p> <%= t.content %></p>
                               <small>@<%= t.screen_name %></small>
-                              </blockquote>
+                            </blockquote>
                           <% end %>
                         <% else %>
                           <p>no tweets</p>
@@ -219,38 +257,76 @@
 
 
                       <%= content_tag :div, :class => "tab-pane", :id => "modal-pictures#{counter}" do -%>
-                          
+
                         <%  if e.pictures.any? %>
                           <ul class="thumbnails">
-                          <% e.pictures.each do |p| %>
+                            <% e.pictures.each do |p| %>
 
-                            <% pictures = Picture.check_url(p.url)
+                              <% pictures = Picture.check_url(p.url)
                             %>
-                          
-                            <%= content_tag :li,  :class => "span2"  do -%>
+
+                              <%= content_tag :li,  :class => "span2"  do -%>
 
 
-                              <%= content_tag :a, :href => "#{pictures[0]}", :class => "thumbnail", :rel => "tooltip", :title => "#{pictures[0]}"   do -%>
-                                <%= content_tag :img, :src => "#{pictures[1]}"  do -%>
+                                <%= content_tag :a, :href => "#{pictures[0]}", :class => "thumbnail", :rel => "tooltip", :title => "#{pictures[0]}"   do -%>
+                                  <%= content_tag :img, :src => "#{pictures[1]}"  do -%>
+                                  <%end%>
                                 <%end%>
                               <%end%>
                             <%end%>
-                          <%end%>
-                            </ul>
+                          </ul>
                         <% else %>
                           <p>No pictures yet</p>
                         <% end %>
-                          
+
                       <%end%> 
 
 
 
 
                       <%= content_tag :div, :class => "tab-pane", :id => "modal-videos#{counter}" do -%>
-                        vids
+                        <%  if e.videos.any? %>
+                          <ul class="thumbnails">
+                            <% e.videos.each do |v| %>
+
+                              <%= content_tag :li, :class => "span3 thumbnail"  do -%>
+                                <% if Video.is_youtube_url(v.url)%>
+
+
+                                  <%= content_tag :iframe, :width => "260", :height => "180", :src => "#{URI.extract(v.url)[0]}", :frameborder =>"0" do %>
+                                  <%end%>
+
+                                <% else %>
+
+                                  <%= content_tag :img, :src => "assets/no_video.png"  do -%><%end%>
+                                <%end%>
+                              <%end%>
+                            <%end%> 
+                          </ul>
+                        <% else %>
+                          <p>No videos yet</p>
+                        <% end %>
                       <%end%>
-                         <%= content_tag :div, :class => "tab-pane", :id => "modal-blogs#{counter}" do -%>
-                        blogs
+                      <%= content_tag :div, :class => "tab-pane", :id => "modal-blogs#{counter}" do -%>
+                        <%  if e.blogs.any? %>
+                          <table class="table">
+                            <% e.blogs.each do |b| %>
+
+                              <tr><td>
+                                  <blockquote>
+                                    <%= b.url %>
+                                  </blockquote>
+                                </td>
+                                <td>
+                                  <%= link_to "more..", event_detail_path(EventDetail.find(b.event_detail_id).character_id) %>
+                                </td></tr>
+
+                            <% end %>
+                          </table>            
+                        <% else %>
+                          <p>No blogs yet</p>
+                        <% end %>
+
                       <%end%>
 
 
