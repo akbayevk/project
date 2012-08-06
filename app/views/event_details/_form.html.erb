@@ -31,15 +31,19 @@
       </div>
     </div>
   </div>
-
+<h3>pictures</h3>
   <%= f.fields_for :pictures do |builder| %>
     <%= render 'picture_fields', f: builder %>
     
   <% end %>
+<%= link_to_add_fields "Add Pictures", f, :pictures %>
 
-
-
-
+<h3>videos</h3>
+<%= f.fields_for :videos do |builder| %>
+    <%= render 'video_fields', f: builder %>
+    
+  <% end %>
+<%= link_to_add_fields "Add Videos", f, :videos %>
 
 
 
@@ -47,6 +51,5 @@
     <%= f.submit nil, :class => 'btn btn-primary' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
       event_details_path, :class => 'btn' %>
-    <%= link_to  %>
   </div>
 <% end %>

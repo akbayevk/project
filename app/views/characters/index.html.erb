@@ -1,21 +1,27 @@
 
 <%- model_class = Character.new.class -%>
 
-
+<div class="row">
+  <div class="span9">
 <%= gmaps(
   "map_options" => {"auto_adjust" => "true", "bounds" => '[{"lat": 0, "lng": 0 }, {"lat": 80 , "lng": 100 }]'},
   "markers" => {"data" => @json,
     "options" => {"do_clustering" => true}},
   "polylines" => {"data" => @p}
 ) %>  
-
+ </div>
+  <div class="span3">
+    <br/><br/> <br/> <br/>
+        <a href='/calendar' class="thumbnail" rel="tooltip"  title="Click to see all conferences and events in calendar view">
+          <img src="assets/calendar.png" alt="calendar"/>
+        </a>
+       </div>
+</div>
 <br/>
-
 <br/>
 
 
 <ul class="nav nav-tabs">
-  <li><a href="#calendar" data-toggle="tab">Calendar</a></li>
   <li><a href="#tweets" data-toggle="tab">Latest Tweets</a></li>
   <li><a href="#pictures" data-toggle="tab">Latest Pictures</a></li>
   <li><a href="#videos" data-toggle="tab">Latest Videos</a></li>
@@ -24,18 +30,7 @@
 </ul>
 
 <div class="tab-content">
-  <div class="tab-pane active" id="calendar">
-    <div class="row">
-      <div class="span4">
-        <a href='/calendar' class="thumbnail" rel="popover"  data-content="Click to see all conferences and events in calendar view. If you interested in some of them you van" data-original-title="Calendar of events">
-          <img src="assets/calendar.png" alt="calendar"/>
-        </a>
-      </div>
-
-    </div>
-
-  </div>
-  <div class="tab-pane" id="tweets">
+  <div class="tab-pane active" id="tweets">
     <table class="table table-striped">
 
       <%  tweets = Tweet.find(:all, :group => 'event_detail_id', :limit => 5, :order => 'created_at desc') %>
@@ -56,7 +51,22 @@
     </table>
   </div>
   <div class="tab-pane" id="pictures">
-    some pictures
+    
+    <% last_pictures = Picture.find(:all, :group => 'event_detail_id', :limit => 4, :order => 'created_at desc') %>
+    <ul class="thumbnails">
+    <% last_pictures.each do |lp| %>
+      <li class="span3">
+        <%  last_pics = Picture.check_url(lp.url)%>
+         <%= content_tag :a, :href => "#{last_pics[0]}", :class => "thumbnail", :rel => "tooltip", :title => "#{last_pics[0]}"  do -%>
+                                <%= content_tag :img, :src => "#{last_pics[1]}"  do -%>
+
+                                <%end%>
+                              <%end%>
+        <%= link_to "   more..", event_detail_path(EventDetail.find(lp.event_detail_id).character_id) %>
+      </li>
+      
+    <%end%>
+      </ul>
   </div>
 
   <div class="tab-pane" id="videos">
@@ -71,7 +81,6 @@
 <br/>
 
 <br/>
-
 
 
 <script type='text/javascript'>
@@ -118,14 +127,13 @@
 
       <tr>
 
-        <td ><%= character.name %></td>
+        <td ><%= link_to character.name, character_path(character) %></td>
         <td><%= character.address %></td>
 
         <td><%= User.find(character.user_id).name %></td>
 
         <td>
-          <%= link_to t('.show details', :default => t("helpers.links.show")),
-            character_path(character), :class => 'btn btn-mini btn-info'%>
+         
 
 
           <%= content_tag :a, :href => "#myModal#{counter}",  :data => {:toggle => "modal"} do -%>
@@ -199,9 +207,10 @@
                       <%= content_tag :div, :class => "tab-pane", :id => "modal-tweets#{counter}" do -%>
                         <%  if e.tweets.any? %>
                           <% e.tweets.each do |t| %>
-                            <p>
-                              <%= t.content %>
-                            </p>
+                             <blockquote >
+                              <p> <%= t.content %></p>
+                              <small>@<%= t.screen_name %></small>
+                              </blockquote>
                           <% end %>
                         <% else %>
                           <p>no tweets</p>
@@ -210,24 +219,28 @@
 
 
                       <%= content_tag :div, :class => "tab-pane", :id => "modal-pictures#{counter}" do -%>
+                          
                         <%  if e.pictures.any? %>
+                          <ul class="thumbnails">
                           <% e.pictures.each do |p| %>
 
-                            <% pictures = URI.extract(p.url) %>
-                            <%= content_tag :div,  :class => "span2"  do -%>
+                            <% pictures = Picture.check_url(p.url)
+                            %>
+                          
+                            <%= content_tag :li,  :class => "span2"  do -%>
 
 
-                              <%= content_tag :a, :href => "#{pictures[0]}", :class => "thumbnail"  do -%>
+                              <%= content_tag :a, :href => "#{pictures[0]}", :class => "thumbnail", :rel => "tooltip", :title => "#{pictures[0]}"   do -%>
                                 <%= content_tag :img, :src => "#{pictures[1]}"  do -%>
-
                                 <%end%>
                               <%end%>
                             <%end%>
                           <%end%>
+                            </ul>
                         <% else %>
                           <p>No pictures yet</p>
                         <% end %>
-
+                          
                       <%end%> 
 
 

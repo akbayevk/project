@@ -26,7 +26,7 @@
 
   </head>
 
-  <body class="without">
+  <body>
        <script type="text/javascript">
 
       var _gaq = _gaq || [];
@@ -40,7 +40,8 @@
       })();
 
     </script>
-    <div class="container">
+   
+         <div class="container">
       <div class="navbar">
         <div class="navbar-inner">
           <div class="container">
@@ -83,13 +84,13 @@
           <%= content_tag :div, msg, :id => "flash_#{name}" if msg.is_a?(String) %>
         </div>
       <% end %>
-
+      
       <%= yield %>
       <%= yield :scripts %>
-
+    
+    
     </div>
-
-
+     
 
   </body>
 </html>

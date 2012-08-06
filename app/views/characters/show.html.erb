@@ -7,7 +7,7 @@
 <div class="row ">
   <div class="span3 well">
     <dl class="dl-horizontal ">
-      
+
       <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
       <dd><%= @character.name %></dd>
       <dt><strong><%= model_class.human_attribute_name(:address) %>:</strong></dt>
@@ -23,17 +23,17 @@
     </dl>
   </div>
   <div class="span8">
-    
-    
-      
-      <% if @character.event_details.any? %>
-        <% for event in @character.event_details %>
-          <h3><%= event.title %></h3>
-          <div class="accordion">
+
+
+
+    <% if @character.event_details.any? %>
+      <% for event in @character.event_details %>
+        <h3><%= event.title %></h3>
+        <div class="accordion">
           <div class="accordion-group">
             <div class="accordion-heading">
               <a href="#" data-toggle="collapse" data-target="#description">Description of the event</a>
-              
+
             </div>
             <div id="description" class="accordion-body in collapse">
               <%= event.description  %>
@@ -44,47 +44,56 @@
               <a href="#" data-toggle="collapse" data-target="#tweets">Tweets from academic about the event</a>
             </div>
             <div id="tweets" class="accordion-body collapse">
-              tweets
+              <% if event.tweets.any? %>
+                <% event.tweets.each do |t| %>
+                  <blockquote>
+                    <p> <%= t.content %></p>
+                    <small>@<%= t.screen_name %></small>
+                  </blockquote>
+                <% end %>
+              <% else %>
+                <p>No tweets yet</p>
+              <% end %>
             </div>
-            
+
           </div>
-             <div class="accordion-group">
+          <div class="accordion-group">
             <div class="accordion-heading">
               <a href="#" data-toggle="collapse" data-target="#pictures">Pictures from academic of the event</a>
             </div>
             <div id="pictures" class="accordion-body collapse">
-              
-          <ul class="thumbnails">
-            <% if event.pictures.any? %>
-              <% for picture in event.pictures %>
-                <% pictures = URI.extract(picture.url) %>
-                <%= content_tag :li,  :class => "span2"  do -%>
+
+              <ul class="thumbnails">
+                <% if event.pictures.any? %>
+                  <% for picture in event.pictures %>
+                    <% pictures = URI.extract(picture.url) %>
+                    <%= content_tag :li,  :class => "span2"  do -%>
 
 
-                  <%= content_tag :a, :href => "#{pictures[0]}", :class => "thumbnail"  do -%>
-                    <%= content_tag :img, :src => "#{pictures[1]}"  do -%>
+                      <%= content_tag :a, :href => "#{pictures[0]}", :class => "thumbnail"  do -%>
+                        <%= content_tag :img, :src => "#{pictures[1]}"  do -%>
 
+                        <%end%>
+                      <%end%>
                     <%end%>
-                  <%end%>
-                <%end%>
 
-              <% end %>
-            <% else %>
-              <p>No pictures yet</p>
-            <% end %>
-          </ul>
+                  <% end %>
+                <% else %>
+                  <p>No pictures yet</p>
+                <% end %>
+              </ul>
 
             </div>
-            
+
           </div>
-             <div class="accordion-group">
+          <div class="accordion-group">
             <div class="accordion-heading">
               <a href="#" data-toggle="collapse" data-target="#videos">Videos from academic of the event</a>
             </div>
             <div id="videos" class="accordion-body collapse">
               vids
             </div>
-             </div>
+          </div>
           <div class="accordion-group">
             <div class="accordion-heading">
               <a href="#" data-toggle="collapse" data-target="#blogs">Videos from academic of the event</a>
@@ -92,14 +101,14 @@
             <div id="blogs" class="accordion-body collapse">
               vids
             </div>
-             </div>
-            </div>
-          <%end%>
-        <% else %>
-          <p>This event has no info yet.</p>
-        <% end %>
-     
-  
+          </div>
+        </div>
+      <%end%>
+    <% else %>
+      <p>This event has no info yet.</p>
+    <% end %>
+
+
   </div>
 </div>
 
@@ -108,8 +117,8 @@
     request.referer, :class => 'btn'  %>
   <%= link_to t('event_detail.show', :default => t("helpers.links.more_details")),
     event_detail_path(@character), :class => 'btn' %>
-  
-<% if (session[:user_id] != nil && @character.user_id == session[:user_id]) %>
+
+  <% if (session[:user_id] != nil && @character.user_id == session[:user_id]) %>
     <%= link_to t('.edit', :default => t("helpers.links.edit")),
       edit_character_path(@character), :class => 'btn' %>
 

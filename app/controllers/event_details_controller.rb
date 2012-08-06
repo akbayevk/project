@@ -129,7 +129,7 @@ class EventDetailsController < ApplicationController
       end
     else
       Tweet.set_tweets(t_account, e.id)    
-     # Tweet.delete_bad_records(e.id, e.from, e.to)
+     Tweet.delete_bad_records(e.id, e.from, e.to)
      redirect_to event_detail_path(e.character_id), notice: 'Succesfully set!'
      
     end
