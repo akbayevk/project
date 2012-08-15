@@ -1,9 +1,12 @@
 ActiveAdmin::Dashboards.build do
   section "Recent Places" do
     table_for Character.order("created_at desc").limit(10) do
-      column :name
+      column :name do |character|
+        link_to character.name , admin_character_path(character)
+      end
       column :address
       column :created_at
+      
     end
     strong {link_to "View all places", admin_characters_path}
   end

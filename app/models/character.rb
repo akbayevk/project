@@ -35,10 +35,5 @@ class Character < ActiveRecord::Base
 
  }
  end
-    def gmaps4rails_sidebar
-      name
-
-end
-
   
 end
