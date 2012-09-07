@@ -2,39 +2,56 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.xml
   def index
+     if User.find_by_id(session[:user_id]).role_id == 1 
     @users = User.order(:name)
 
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @users }
     end
+     else
+       redirect_to characters_path, :notice => "Permission denied!"
+     end
   end
 
   # GET /users/1
   # GET /users/1.xml
   def show
+    
+   if session[:user_id].to_i == params[:id].to_i || User.find_by_id(session[:user_id]).role_id == 1
+    
     @user = User.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @user }
     end
+     else
+       redirect_to characters_path, :notice => "Permission denied!"
+     end
   end
 
   # GET /users/new
   # GET /users/new.xml
   def new
+    if User.find_by_id(session[:user_id]).role_id == 1 
     @user = User.new
 
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @user }
     end
+    else
+      redirect_to characters_path, :notice => "Permission denied!"
+    end
   end
 
   # GET /users/1/edit
   def edit
+    
     @user = User.find(params[:id])
+    
+    
   end
 
   # POST /users
@@ -73,6 +90,7 @@ class UsersController < ApplicationController
       end
     end
   end
+  
 
   # DELETE /users/1
   # DELETE /users/1.xml

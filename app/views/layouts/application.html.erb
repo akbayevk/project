@@ -11,8 +11,8 @@
  
 
     <%= javascript_include_tag "application" %>
-       <%= stylesheet_link_tag "gmaps4rails" %>
-       <%= javascript_include_tag "bootstrap-modal" %>
+    <%= stylesheet_link_tag "gmaps4rails" %>
+    <%= javascript_include_tag "bootstrap-modal" %>
   
     
     
@@ -54,9 +54,14 @@
             <div class="nav-collapse">
               <ul class="nav">
                 <li><%= link_to "Home", characters_path %></li>
-
+                <%if User.find_by_id(session[:user_id])%>
+                <li>
+                  <%= link_to "My Profile", user_path(session[:user_id]) %>
+                </li>
+                <%end%>
                 <li><%= link_to "My places", user_markers_path %></li>
-                <li><a href="/#" class="menulink">Contact Us</a></li>
+                <li><%= link_to "Calendar", calendar_path %></li>
+                
                 <% if !User.find_by_id(session[:user_id]) %>
 
                   <li> 
@@ -71,7 +76,7 @@
                     <%= link_to "Logout", logout_path %>
                   </li>
                 <% end %>
-
+<li><a href="/#" class="menulink">Contact Us</a></li>
               </ul>
             </div>
           </div>

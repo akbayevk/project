@@ -105,7 +105,14 @@ class CharactersController < ApplicationController
   # DELETE /characters/1.json
   def destroy
     @character = Character.find(params[:id])
-    
+    if @character.event_details.any?
+      @character.event_details.each do |e_d|
+        e_d.destroy
+      end
+      @character.events.each do |e|
+        e.destroy
+      end
+    end
     @character.destroy
 
     respond_to do |format|

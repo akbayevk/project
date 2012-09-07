@@ -63,8 +63,9 @@
             </div>
             <div id="pictures" class="accordion-body collapse">
 
-              <ul class="thumbnails">
+              
                 <% if event.pictures.any? %>
+              <ul class="thumbnails">
                   <% for picture in event.pictures %>
                     <% pictures = URI.extract(picture.url) %>
                     <%= content_tag :li,  :class => "span2"  do -%>
@@ -78,10 +79,11 @@
                     <%end%>
 
                   <% end %>
+                </ul>
                 <% else %>
                   <p>No pictures yet</p>
                 <% end %>
-              </ul>
+              
 
             </div>
 
@@ -95,7 +97,7 @@
       <ul class="thumbnails">
         <% event.videos.each do |v| %>
         
-          <%= content_tag :li, :class => "span3 thumbnail"  do -%>
+          <%= content_tag :li, :class => "span4 thumbnail"  do -%>
     <% if Video.is_youtube_url(v.url)%>
           
     
@@ -124,7 +126,7 @@
                 <% event.blogs.each do |b| %>
                   <blockquote>
                     <p> <%= b.url %></p>
-                    <small>@name</small>
+                    
                   </blockquote>
                 <% end %>
               <% else %>

@@ -2,14 +2,14 @@ require 'digest/sha2'
 
 class User < ActiveRecord::Base
   
-  has_many :characters, :inverse_of => :user
+  has_many :characters, :dependent => :delete_all
   belongs_to :role
 
   validates :name, :presence => true, :uniqueness => true
   validates :password, :confirmation => true
   validate  :password_must_be_present
   
-  attr_accessible :name, :password, :password_confirmation
+  attr_accessible :name, :password, :password_confirmation, :twitter, :role_id
   attr_reader   :password
   
   def User.authenticate(name, password)

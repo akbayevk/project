@@ -88,7 +88,7 @@
 
 
 
-      <%= link_to "#{button_value}", {:action => "update_tweets", :id => @event_detail.id}, :class => "btn-info btn-mini pull-right", :rel => "tooltip", :title => "updata only once a day"%>
+      <%= link_to "#{button_value}", {:action => "update_tweets", :id => @event_detail.id}, :class => "btn-info btn-mini pull-right", :rel => "tooltip", :title => "updata only once in hour"%>
     <%end%>
   </div>
 
@@ -103,7 +103,7 @@
       <ul class="thumbnails">
         <% @event_detail.videos.each do |v| %>
         
-          <%= content_tag :li, :class => "span2 thumbnail"  do -%>
+          <%= content_tag :li, :class => "span4 thumbnail"  do -%>
     <% if Video.is_youtube_url(v.url)%>
           
     
@@ -129,7 +129,7 @@
      <% @event_detail.blogs.each do |b| %>
                   <blockquote>
                     <p> <%= b.url %></p>
-                    <small>@name</small>
+                    
                   </blockquote>
                 <% end %>
     <% else %>

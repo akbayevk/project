@@ -1,7 +1,7 @@
 class Picture < ActiveRecord::Base
   attr_accessible :event_detail_id, :url
   belongs_to :event_detail
-  
+  validates_presence_of :url
   def Picture.check_url(str)
     
      urls = URI.extract(str)

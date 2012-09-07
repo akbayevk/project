@@ -6,12 +6,7 @@ class EventDetailsController < ApplicationController
   
   
   def index
-    @event_details = EventDetail.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @event_details }
-    end
+    redirect_to characters_path
   end
 
   # GET /event_details/1
@@ -118,9 +113,14 @@ class EventDetailsController < ApplicationController
     if Tweet.find_all_by_event_detail_id(params[:id]).any?
       
       t = Tweet.find_all_by_event_detail_id(params[:id]).last
-      check_date = Date.parse(t.updated_at.to_s)
-      if Date.today == check_date
-        redirect_to event_detail_path(e.character_id), notice: 'You cannot update tweets today. Try tomorrow!'
+      check_date = DateTime.now
+      
+      beginning_of_hour = DateTime.civil(check_date.year,check_date.month,check_date.day,check_date.hour,00,00)
+      end_of_hour       = DateTime.civil(check_date.year,check_date.month,check_date.day,check_date.hour,59,59)
+      
+      if  t.updated_at >= beginning_of_hour &&t.updated_at <= end_of_hour
+      
+          redirect_to event_detail_path(e.character_id), :notice => 'You cannot update tweets during this hour. Try later!'
       
     else
       Tweet.set_tweets(t_account, e.id)    
@@ -129,7 +129,7 @@ class EventDetailsController < ApplicationController
       end
     else
       Tweet.set_tweets(t_account, e.id)    
-     Tweet.delete_bad_records(e.id, e.from, e.to)
+     
      redirect_to event_detail_path(e.character_id), notice: 'Succesfully set!'
      
     end
@@ -153,8 +153,6 @@ class EventDetailsController < ApplicationController
   # DELETE /event_details/1.json
   def destroy
     @event_detail = EventDetail.find(params[:id])
-    @event_detail.tweets.destroy
-    @event_detail.pictures.destroy
     @event_detail.destroy
 
     respond_to do |format|

@@ -7,7 +7,7 @@ class EventDetail < ActiveRecord::Base
   has_many :tweets, :dependent => :delete_all
   has_many :videos, :dependent => :delete_all
   has_many :blogs, :dependent => :delete_all
-
+  validates :title, :description, :from, :to, :presence => true
 
   accepts_nested_attributes_for :pictures, :tweets, :videos , :blogs,  :allow_destroy => true
 

@@ -1,57 +1,55 @@
 
 
-<%= form_for @event_detail, :html => { :class => 'form-horizontal' } do |f| %>
+<%= simple_form_for @event_detail, :html => { :class => 'form-horizontal' } do |f| %>
   <div class="field">
-    
-    
-        <%= f.hidden_field :character_id %>
-    
-    <div class="control-group">
-      <%= f.label :title, :class => 'control-label' %>
-      <div class="controls">
-        <%= f.text_field :title, :class => 'text_field' %>
+
+
+    <%= f.hidden_field :character_id %>
+
+    <%= f.input :title %>
+    <%= f.input :description, :input_html => { :class => 'input-xlarge', :rows => '5' }   %>
+    <%= f.input :from %>
+    <%= f.input :to %>
+
+  </div>
+<hr/>
+  <div class="row">
+    <div class="span6">
+      
+      <h3>pictures</h3>
+      
+  <%= f.fields_for :pictures do |builder| %>
+        <div class="well">
+          <%= render 'picture_fields', f: builder %>
+   </div>
+        <% end %>
+      
+      <%= link_to_add_fields "Add Pictures", f, :pictures %>
+ 
       </div>
-    </div>
-    <div class="control-group">
-      <%= f.label :description, :class => 'control-label' %>
-      <div class="controls">
-        <%= f.text_area :description, :class => 'input-xlarge', :rows => '5' %>
-      </div>
-    </div>
-    <div class="control-group">
-      <%= f.label :from, :class => 'control-label' %>
-      <div class="controls">
-        <%= f.date_select :from, :class => 'date_select' %>
-      </div>
-    </div>
-    <div class="control-group">
-      <%= f.label :to, :class => 'control-label' %>
-      <div class="controls">
-        <%= f.date_select :to, :class => 'date_select' %>
-      </div>
+    <div class="span6">
+      
+      <h3>videos</h3>
+      <%= f.fields_for :videos do |builder| %>
+      <div class="well">
+        <%= render 'video_fields', f: builder %>
+</div>
+      <% end %>
+      <%= link_to_add_fields "Add Videos", f, :videos %>
     </div>
   </div>
-<h3>pictures</h3>
-  <%= f.fields_for :pictures do |builder| %>
-    <%= render 'picture_fields', f: builder %>
-    
-  <% end %>
-<%= link_to_add_fields "Add Pictures", f, :pictures %>
-
-<h3>videos</h3>
-<%= f.fields_for :videos do |builder| %>
-    <%= render 'video_fields', f: builder %>
-    
-  <% end %>
-<%= link_to_add_fields "Add Videos", f, :videos %>
-
-<h3>blogs</h3>
-<%= f.fields_for :blogs do |builder| %>
+<hr/>
+<div class="row">
+    <div class="span8">
+      <h3>blogs</h3>
+      <%= f.fields_for :blogs do |builder| %>
+      <div class="well">
     <%= render 'blog_fields', f: builder %>
-    
-  <% end %>
-<%= link_to_add_fields "Add Blogs", f, :blogs %>
-
+</div> 
+      <% end %>
+      <%= link_to_add_fields "Add Blogs", f, :blogs %>
+    </div>
+  </div>
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),

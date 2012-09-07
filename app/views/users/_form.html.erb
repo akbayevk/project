@@ -1,34 +1,16 @@
-<div>
-<%= form_for(@user) do |f| %>
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
-      <ul>
-      <% @user.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-<fieldset>
-  <legend>Enter user details</legend>
-  <div class="field">
-    <%= f.label :name %>                <br/>
-    <%= f.text_field :name, :size => 40 %>
+<%= simple_form_for @user, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.input :name %>
+  <%= f.input :password %>
+  <%= f.input :password_confirmation %>
+  <%= f.input :twitter %>
+ <% if User.find_by_id(session[:user_id]).role_id == 1 %>
+  <%= f.input :role_id %>
+<%end %>
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                users_path, :class => 'btn' %>
   </div>
-  <div class="field">
-    <%= f.label :password, 'Password' %><br />
-    <%= f.password_field :password, :size => 40 %>
-  </div>
-  <div class="field">
-    <%= f.label :password_confirmation, 'Confirm password' %><br />
-    <%= f.password_field :password_confirmation, :size => 40 %>
-  </div>
-  <div>
-    <%= f.submit %>
-  </div>
-    </fieldset>
 <% end %>
 
-</div>
+
